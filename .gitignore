@@ -1,0 +1,22 @@
+# ========================
+# NetBeans
+# ========================
+nbproject/private/
+nb-configuration.xml
+nbbuild/
+dist/
+build/
+manifest.mf
+
+.vscode/
+
+*.class
+*.jar
+*.war
+*.ear
+*.log
+target/
+
+.DS_Store
+Thumbs.db
+desktop.ini
