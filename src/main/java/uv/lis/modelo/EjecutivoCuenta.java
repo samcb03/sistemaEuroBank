@@ -60,4 +60,9 @@ public class EjecutivoCuenta extends Empleado {
     public String obtenerDescripcionPuesto() {
         return "Ejecutivo de Cuenta (" + especializacion + ")";
     }
+
+    @Override
+    public Rol obtenerRol() {
+        return Rol.EJECUTIVO;
+    }
 }

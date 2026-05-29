@@ -130,6 +130,8 @@ public abstract class Empleado implements Serializable {
         return resultado;
     }
 
+    public abstract Rol obtenerRol();
+
     @Override
     public int hashCode() {
         return Objects.hash(idEmpleado);

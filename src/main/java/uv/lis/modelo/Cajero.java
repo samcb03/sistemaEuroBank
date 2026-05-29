@@ -71,4 +71,9 @@ public class Cajero extends Empleado {
     public String obtenerDescripcionPuesto() {
         return "Cajero";
     }
+
+    @Override
+    public Rol obtenerRol() {
+        return Rol.CAJERO;
+    }
 }

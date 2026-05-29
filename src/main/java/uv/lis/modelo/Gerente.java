@@ -60,4 +60,9 @@ public class Gerente extends Empleado {
     public String obtenerDescripcionPuesto() {
         return "Gerente (" + nivelAcceso + ")";
     }
+
+    @Override
+    public Rol obtenerRol() {
+        return Rol.GERENTE;
+    }
 }
