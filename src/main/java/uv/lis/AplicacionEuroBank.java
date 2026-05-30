@@ -16,7 +16,8 @@ public class AplicacionEuroBank extends Application {
         RepositorioEmpleados repositorioEmpleados = new RepositorioEmpleados();
         ServicioAutenticacion servicioAutenticacion = new ServicioAutenticacion(repositorioEmpleados);
         VistaLogin vistaLogin = new VistaLogin();
-        ControladorLogin controladorLogin = new ControladorLogin(vistaLogin, servicioAutenticacion);
+        ControladorLogin controladorLogin =
+                new ControladorLogin(vistaLogin, servicioAutenticacion, repositorioEmpleados);
         controladorLogin.iniciar();
         configurarEscenario(escenarioPrincipal, vistaLogin);
     }

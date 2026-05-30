@@ -5,8 +5,12 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import uv.lis.modelo.excepcion.EmpleadoDuplicadoException;
+import uv.lis.modelo.excepcion.EmpleadoNoEncontradoException;
 
 public class RepositorioEmpleados {
+
+    private static final int INDICE_NO_ENCONTRADO = -1;
 
     private final List<Empleado> empleados;
 
@@ -37,5 +41,70 @@ public class RepositorioEmpleados {
             }
         }
         return empleadoEncontrado;
+    }
+
+    public Optional<Empleado> buscarPorId(String idEmpleado) {
+        Optional<Empleado> empleadoEncontrado = Optional.empty();
+        for (Empleado empleado : empleados) {
+            if (empleado.getIdEmpleado().equals(idEmpleado)) {
+                empleadoEncontrado = Optional.of(empleado);
+            }
+        }
+        return empleadoEncontrado;
+    }
+
+    public List<Empleado> obtenerTodos() {
+        List<Empleado> copiaEmpleados = new ArrayList<Empleado>(empleados);
+        return copiaEmpleados;
+    }
+
+    public void agregar(Empleado empleado) throws EmpleadoDuplicadoException {
+        if (existeId(empleado.getIdEmpleado())) {
+            throw new EmpleadoDuplicadoException(
+                    "Ya existe un empleado con el ID " + empleado.getIdEmpleado() + ".");
+        }
+        if (existeNombreUsuario(empleado.getNombreUsuario())) {
+            throw new EmpleadoDuplicadoException(
+                    "Ya existe un empleado con el usuario " + empleado.getNombreUsuario() + ".");
+        }
+        empleados.add(empleado);
+    }
+
+    public void actualizar(Empleado empleado) throws EmpleadoNoEncontradoException {
+        int indice = obtenerIndicePorId(empleado.getIdEmpleado());
+        if (indice == INDICE_NO_ENCONTRADO) {
+            throw new EmpleadoNoEncontradoException(
+                    "No se encontro el empleado con ID " + empleado.getIdEmpleado() + ".");
+        }
+        empleados.set(indice, empleado);
+    }
+
+    public void eliminar(String idEmpleado) throws EmpleadoNoEncontradoException {
+        int indice = obtenerIndicePorId(idEmpleado);
+        if (indice == INDICE_NO_ENCONTRADO) {
+            throw new EmpleadoNoEncontradoException(
+                    "No se encontro el empleado con ID " + idEmpleado + ".");
+        }
+        empleados.remove(indice);
+    }
+
+    private boolean existeId(String idEmpleado) {
+        boolean existe = obtenerIndicePorId(idEmpleado) != INDICE_NO_ENCONTRADO;
+        return existe;
+    }
+
+    private boolean existeNombreUsuario(String nombreUsuario) {
+        boolean existe = buscarPorNombreUsuario(nombreUsuario).isPresent();
+        return existe;
+    }
+
+    private int obtenerIndicePorId(String idEmpleado) {
+        int indiceEncontrado = INDICE_NO_ENCONTRADO;
+        for (int indice = 0; indice < empleados.size(); indice++) {
+            if (empleados.get(indice).getIdEmpleado().equals(idEmpleado)) {
+                indiceEncontrado = indice;
+            }
+        }
+        return indiceEncontrado;
     }
 }

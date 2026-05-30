@@ -108,6 +108,16 @@ public abstract class Empleado implements Serializable {
         return edad;
     }
 
+    public int getEdad() {
+        int edad = calcularEdad();
+        return edad;
+    }
+
+    public String getDescripcionPuesto() {
+        String descripcion = obtenerDescripcionPuesto();
+        return descripcion;
+    }
+
     public boolean coincideCredenciales(String usuarioIngresado, String contraseniaIngresada) {
         boolean coinciden = Objects.equals(nombreUsuario, usuarioIngresado)
                 && Objects.equals(contrasenia, contraseniaIngresada);

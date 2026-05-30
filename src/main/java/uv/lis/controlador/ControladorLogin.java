@@ -1,19 +1,28 @@
 package uv.lis.controlador;
 
+import javafx.stage.Stage;
 import uv.lis.modelo.Empleado;
+import uv.lis.modelo.RepositorioEmpleados;
 import uv.lis.modelo.ResultadoAutenticacion;
 import uv.lis.modelo.Rol;
 import uv.lis.modelo.ServicioAutenticacion;
+import uv.lis.vista.VistaEmpleados;
 import uv.lis.vista.VistaLogin;
 
 public class ControladorLogin {
 
+    private static final String TITULO_VENTANA_EMPLEADOS = "EuroBank - Administracion de Empleados";
+
     private final VistaLogin vistaLogin;
     private final ServicioAutenticacion servicioAutenticacion;
+    private final RepositorioEmpleados repositorioEmpleados;
 
-    public ControladorLogin(VistaLogin vistaLogin, ServicioAutenticacion servicioAutenticacion) {
+    public ControladorLogin(VistaLogin vistaLogin,
+                            ServicioAutenticacion servicioAutenticacion,
+                            RepositorioEmpleados repositorioEmpleados) {
         this.vistaLogin = vistaLogin;
         this.servicioAutenticacion = servicioAutenticacion;
+        this.repositorioEmpleados = repositorioEmpleados;
     }
 
     public void iniciar() {
@@ -75,10 +84,10 @@ public class ControladorLogin {
         Rol rol = empleado.obtenerRol();
         switch (rol) {
             case ADMINISTRADOR:
-                // abrir Ventana Principal con acceso total (root)
+                abrirVentanaEmpleados();
                 break;
             case GERENTE:
-                // abrir Ventana Principal de gerente
+                abrirVentanaEmpleados();
                 break;
             case CAJERO:
                 // abrir Ventana Principal de cajero
@@ -89,5 +98,20 @@ public class ControladorLogin {
             default:
                 break;
         }
+    }
+
+    private void abrirVentanaEmpleados() {
+        VistaEmpleados vistaEmpleados = new VistaEmpleados();
+        ControladorEmpleados controladorEmpleados =
+                new ControladorEmpleados(vistaEmpleados, repositorioEmpleados);
+        controladorEmpleados.iniciar();
+        mostrarEscenarioEmpleados(vistaEmpleados);
+    }
+
+    private void mostrarEscenarioEmpleados(VistaEmpleados vistaEmpleados) {
+        Stage escenarioEmpleados = new Stage();
+        escenarioEmpleados.setTitle(TITULO_VENTANA_EMPLEADOS);
+        escenarioEmpleados.setScene(vistaEmpleados.obtenerEscena());
+        escenarioEmpleados.show();
     }
 }
