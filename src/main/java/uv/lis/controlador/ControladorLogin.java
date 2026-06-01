@@ -4,14 +4,13 @@ import javafx.stage.Stage;
 import uv.lis.modelo.Empleado;
 import uv.lis.modelo.RepositorioEmpleados;
 import uv.lis.modelo.ResultadoAutenticacion;
-import uv.lis.modelo.Rol;
 import uv.lis.modelo.ServicioAutenticacion;
-import uv.lis.vista.VistaEmpleados;
 import uv.lis.vista.VistaLogin;
+import uv.lis.vista.VistaMenuPrincipal;
 
 public class ControladorLogin {
 
-    private static final String TITULO_VENTANA_EMPLEADOS = "EuroBank - Administracion de Empleados";
+    private static final String TITULO_VENTANA_MENU = "EuroBank - Menu Principal";
 
     private final VistaLogin vistaLogin;
     private final ServicioAutenticacion servicioAutenticacion;
@@ -81,37 +80,26 @@ public class ControladorLogin {
     }
 
     private void abrirVentanaPrincipal(Empleado empleado) {
-        Rol rol = empleado.obtenerRol();
-        switch (rol) {
-            case ADMINISTRADOR:
-                abrirVentanaEmpleados();
-                break;
-            case GERENTE:
-                abrirVentanaEmpleados();
-                break;
-            case CAJERO:
-                // abrir Ventana Principal de cajero
-                break;
-            case EJECUTIVO:
-                // abrir Ventana Principal de ejecutivo
-                break;
-            default:
-                break;
-        }
+        Stage escenarioLogin = obtenerEscenarioLogin();
+        VistaMenuPrincipal vistaMenu = new VistaMenuPrincipal();
+        Stage escenarioMenu = crearEscenarioMenu(vistaMenu);
+        ControladorMenuPrincipal controladorMenu = new ControladorMenuPrincipal(
+                vistaMenu, empleado, repositorioEmpleados, escenarioMenu, escenarioLogin);
+        controladorMenu.iniciar();
+        escenarioLogin.hide();
+        escenarioMenu.show();
     }
 
-    private void abrirVentanaEmpleados() {
-        VistaEmpleados vistaEmpleados = new VistaEmpleados();
-        ControladorEmpleados controladorEmpleados =
-                new ControladorEmpleados(vistaEmpleados, repositorioEmpleados);
-        controladorEmpleados.iniciar();
-        mostrarEscenarioEmpleados(vistaEmpleados);
+    private Stage obtenerEscenarioLogin() {
+        Stage escenarioLogin = (Stage) vistaLogin.obtenerEscena().getWindow();
+        return escenarioLogin;
     }
 
-    private void mostrarEscenarioEmpleados(VistaEmpleados vistaEmpleados) {
-        Stage escenarioEmpleados = new Stage();
-        escenarioEmpleados.setTitle(TITULO_VENTANA_EMPLEADOS);
-        escenarioEmpleados.setScene(vistaEmpleados.obtenerEscena());
-        escenarioEmpleados.show();
+    private Stage crearEscenarioMenu(VistaMenuPrincipal vistaMenu) {
+        Stage escenarioMenu = new Stage();
+        escenarioMenu.setTitle(TITULO_VENTANA_MENU);
+        escenarioMenu.setScene(vistaMenu.obtenerEscena());
+        escenarioMenu.setResizable(false);
+        return escenarioMenu;
     }
 }

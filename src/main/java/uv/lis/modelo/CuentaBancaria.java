@@ -6,7 +6,6 @@ public abstract class CuentaBancaria {
     private double saldo;
     private Cliente cliente;
 
-
     public CuentaBancaria(String numeroCuenta, double saldoInicial, Cliente cliente) {
         this.numeroCuenta = numeroCuenta;
         this.saldo = saldoInicial;

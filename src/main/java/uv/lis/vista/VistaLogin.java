@@ -12,11 +12,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-/**
- * Construye y expone la interfaz grafica de la ventana de acceso.
- * No contiene logica de negocio ni de control: solo arma los componentes,
- * los entrega al controlador y ofrece operaciones para mostrar mensajes.
- */
 public class VistaLogin {
 
     private static final double ANCHO_ESCENA = 380;
