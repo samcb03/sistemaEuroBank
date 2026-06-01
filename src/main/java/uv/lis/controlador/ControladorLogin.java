@@ -3,19 +3,20 @@ package uv.lis.controlador;
 import javafx.stage.Stage;
 import uv.lis.modelo.Empleado;
 import uv.lis.modelo.RepositorioEmpleados;
+import uv.lis.modelo.RepositorioSucursales;
 import uv.lis.modelo.ResultadoAutenticacion;
-import uv.lis.modelo.Rol;
 import uv.lis.modelo.ServicioAutenticacion;
-import uv.lis.vista.VistaEmpleados;
 import uv.lis.vista.VistaLogin;
+import uv.lis.vista.VistaMenuPrincipal;
 
 public class ControladorLogin {
 
-    private static final String TITULO_VENTANA_EMPLEADOS = "EuroBank - Administracion de Empleados";
+    private static final String TITULO_VENTANA_MENU = "EuroBank - Menu Principal";
 
     private final VistaLogin vistaLogin;
     private final ServicioAutenticacion servicioAutenticacion;
     private final RepositorioEmpleados repositorioEmpleados;
+    private final RepositorioSucursales repositorioSucursales;
 
     public ControladorLogin(VistaLogin vistaLogin,
                             ServicioAutenticacion servicioAutenticacion,
@@ -23,6 +24,7 @@ public class ControladorLogin {
         this.vistaLogin = vistaLogin;
         this.servicioAutenticacion = servicioAutenticacion;
         this.repositorioEmpleados = repositorioEmpleados;
+        this.repositorioSucursales = new RepositorioSucursales();
     }
 
     public void iniciar() {
@@ -64,10 +66,8 @@ public class ControladorLogin {
     }
 
     private void atenderAccesoConcedido(Empleado empleado) {
-        String saludo = "Bienvenido " + empleado.getNombreCompleto()
-                + " (" + empleado.obtenerDescripcionPuesto() + ").";
-        vistaLogin.mostrarMensajeExito(saludo);
-        abrirVentanaPrincipal(empleado);
+        vistaLogin.mostrarMensajeExito("Bienvenido " + empleado.getNombreCompleto() + ".");
+        abrirMenuPrincipal(empleado);
     }
 
     private void atenderAccesoDenegado(String mensaje) {
@@ -76,42 +76,21 @@ public class ControladorLogin {
     }
 
     private boolean camposIncompletos(String nombreUsuario, String contrasenia) {
-        boolean incompletos = nombreUsuario.isEmpty() || contrasenia.isEmpty();
-        return incompletos;
+        return nombreUsuario.isEmpty() || contrasenia.isEmpty();
     }
 
-    private void abrirVentanaPrincipal(Empleado empleado) {
-        Rol rol = empleado.obtenerRol();
-        switch (rol) {
-            case ADMINISTRADOR:
-                abrirVentanaEmpleados();
-                break;
-            case GERENTE:
-                abrirVentanaEmpleados();
-                break;
-            case CAJERO:
-                // abrir Ventana Principal de cajero
-                break;
-            case EJECUTIVO:
-                // abrir Ventana Principal de ejecutivo
-                break;
-            default:
-                break;
-        }
-    }
-
-    private void abrirVentanaEmpleados() {
-        VistaEmpleados vistaEmpleados = new VistaEmpleados();
-        ControladorEmpleados controladorEmpleados =
-                new ControladorEmpleados(vistaEmpleados, repositorioEmpleados);
-        controladorEmpleados.iniciar();
-        mostrarEscenarioEmpleados(vistaEmpleados);
-    }
-
-    private void mostrarEscenarioEmpleados(VistaEmpleados vistaEmpleados) {
-        Stage escenarioEmpleados = new Stage();
-        escenarioEmpleados.setTitle(TITULO_VENTANA_EMPLEADOS);
-        escenarioEmpleados.setScene(vistaEmpleados.obtenerEscena());
-        escenarioEmpleados.show();
+    private void abrirMenuPrincipal(Empleado empleado) {
+        Stage escenarioPrincipal = (Stage) vistaLogin.obtenerEscena().getWindow();
+        VistaMenuPrincipal vistaMenuPrincipal = new VistaMenuPrincipal(empleado);
+        ControladorMenuPrincipal controladorMenuPrincipal = new ControladorMenuPrincipal(
+                vistaMenuPrincipal,
+                repositorioEmpleados,
+                repositorioSucursales,
+                escenarioPrincipal,
+                vistaLogin);
+        controladorMenuPrincipal.iniciar(empleado.obtenerRol());
+        escenarioPrincipal.setTitle(TITULO_VENTANA_MENU);
+        escenarioPrincipal.setScene(vistaMenuPrincipal.obtenerEscena());
+        escenarioPrincipal.centerOnScreen();
     }
 }
