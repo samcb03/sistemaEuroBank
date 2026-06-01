@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 
 public class CuentaControlador {
 
-    private final List<CuentaBancaria> cuentas = null;
+    private final List<CuentaBancaria> cuentas = new ArrayList<>();
 
     public void abrirCuenta(CuentaBancaria cuenta) throws IllegalArgumentException {
         if (cuenta.getNumeroCuenta() == null || cuenta.getNumeroCuenta().isBlank()) {
