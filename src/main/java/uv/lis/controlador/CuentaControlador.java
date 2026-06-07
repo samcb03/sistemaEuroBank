@@ -2,6 +2,10 @@ package uv.lis.controlador;
 
 import uv.lis.modelo.CuentaBancaria;
 import uv.lis.modelo.CuentaEmpresarial;
+import uv.lis.modelo.excepcion.CuentaDuplicadaException;
+import uv.lis.modelo.excepcion.CuentaNoEncontradaException;
+import uv.lis.modelo.excepcion.SaldoInsuficienteException;
+import uv.lis.vista.VistaCuenta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,56 +14,89 @@ import java.util.Optional;
 public class CuentaControlador {
 
     private final List<CuentaBancaria> cuentas = new ArrayList<>();
+    private VistaCuenta vista;
 
-    public void abrirCuenta(CuentaBancaria cuenta) throws IllegalArgumentException {
+    public void iniciar(VistaCuenta vista) {
+        this.vista = vista;
+        vista.refrescarTabla(obtenerTodasLasCuentas());
+
+        vista.obtenerBotonAgregar().setOnAction(e -> solicitarAbrirCuenta());
+        vista.obtenerBotonCerrar().setOnAction(e -> solicitarCerrarCuenta());
+    }
+
+    public void abrirCuenta(CuentaBancaria cuenta)
+            throws CuentaDuplicadaException {
         if (cuenta.getNumeroCuenta() == null || cuenta.getNumeroCuenta().isBlank()) {
             throw new IllegalArgumentException("El número de cuenta es obligatorio.");
         }
         if (existeCuenta(cuenta.getNumeroCuenta())) {
-            throw new IllegalArgumentException("La cuenta ya existe: " + cuenta.getNumeroCuenta());
+            throw new CuentaDuplicadaException(
+                "Ya existe una cuenta con el número: " + cuenta.getNumeroCuenta());
         }
         cuentas.add(cuenta);
     }
 
-    public void modificarLimiteCredito(String numeroCuenta, double nuevoLimite) throws IllegalArgumentException {
-        CuentaBancaria cuenta = buscarCuenta(numeroCuenta)
-                .orElseThrow(() -> new IllegalArgumentException("Cuenta no encontrada: " + numeroCuenta));
-        
-        if (cuenta instanceof CuentaEmpresarial) {
-            ((CuentaEmpresarial) cuenta).setLimiteCredito(nuevoLimite);
-        } else {
-            throw new IllegalArgumentException("Solo las cuentas empresariales permiten modificar el límite.");
+    public void cerrarCuenta(String numeroCuenta)
+            throws CuentaNoEncontradaException, SaldoInsuficienteException {
+        CuentaBancaria cuenta = buscarCuentaOExcepcion(numeroCuenta);
+        if (cuenta.getSaldo() != 0) {
+            throw new SaldoInsuficienteException(
+                "La cuenta " + numeroCuenta + " aún tiene saldo $"
+                + cuenta.getSaldo() + ". Debe ser $0 para cerrarla.");
         }
+        cuentas.remove(cuenta);
     }
 
-    public void cerrarCuenta(String numeroCuenta) throws IllegalStateException {
-        CuentaBancaria cuenta = buscarCuenta(numeroCuenta)
-                .orElseThrow(() -> new IllegalStateException("Cuenta no encontrada: " + numeroCuenta));
-        
-        if (cuenta.getSaldo() != 0) {
-            throw new IllegalStateException("El saldo debe ser cero para cerrar la cuenta.");
+    public void modificarLimiteCredito(String numeroCuenta, double nuevoLimite)
+            throws CuentaNoEncontradaException {
+        CuentaBancaria cuenta = buscarCuentaOExcepcion(numeroCuenta);
+        if (!(cuenta instanceof CuentaEmpresarial)) {
+            throw new IllegalArgumentException(
+                "Solo las cuentas empresariales permiten modificar el límite de crédito.");
         }
+        ((CuentaEmpresarial) cuenta).setLimiteCredito(nuevoLimite);
     }
 
     public Optional<CuentaBancaria> buscarCuenta(String numeroCuenta) {
         return cuentas.stream()
-                .filter(c -> c.getNumeroCuenta().equals(numeroCuenta))
-                .findFirst();
+            .filter(c -> c.getNumeroCuenta().equals(numeroCuenta))
+            .findFirst();
     }
 
     public boolean existeCuenta(String numeroCuenta) {
         return cuentas.stream()
-                .anyMatch(c -> c.getNumeroCuenta().equals(numeroCuenta));
+            .anyMatch(c -> c.getNumeroCuenta().equals(numeroCuenta));
     }
 
     public List<CuentaBancaria> obtenerTodasLasCuentas() {
         return new ArrayList<>(cuentas);
     }
 
-    public void actualizarSaldo(String numeroCuenta, double nuevoSaldo) {
-        buscarCuenta(numeroCuenta).ifPresent(cuenta -> {
-            cuenta.setSaldo(nuevoSaldo);
-        });
+    private void solicitarAbrirCuenta() {
+        vista.mostrarMensajeInformacion("Funcionalidad de apertura de cuenta pendiente.");
     }
 
+    private void solicitarCerrarCuenta() {
+        CuentaBancaria seleccionada = vista.obtenerCuentaSeleccionada();
+        if (seleccionada == null) {
+            vista.mostrarMensajeError("Seleccione una cuenta para cerrar.");
+            return;
+        }
+        if (vista.confirmarCierre(seleccionada.getNumeroCuenta())) {
+            try {
+                cerrarCuenta(seleccionada.getNumeroCuenta());
+                vista.refrescarTabla(obtenerTodasLasCuentas());
+                vista.mostrarMensajeInformacion("Cuenta cerrada correctamente.");
+            } catch (CuentaNoEncontradaException | SaldoInsuficienteException ex) {
+                vista.mostrarMensajeError(ex.getMessage());
+            }
+        }
+    }
+
+    private CuentaBancaria buscarCuentaOExcepcion(String numeroCuenta)
+            throws CuentaNoEncontradaException {
+        return buscarCuenta(numeroCuenta)
+            .orElseThrow(() -> new CuentaNoEncontradaException(
+                "No se encontró ninguna cuenta con el número: " + numeroCuenta));
+    }
 }
