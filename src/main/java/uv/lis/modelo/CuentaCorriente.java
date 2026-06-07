@@ -4,23 +4,31 @@ public class CuentaCorriente extends CuentaBancaria {
 
     private double limiteCredito;
 
-    public CuentaCorriente(String numeroCuenta, double saldoInicial, Cliente cliente, String idSucursal, double limiteCredito) {
+    public CuentaCorriente(String numeroCuenta, double saldoInicial, Cliente cliente,
+                           String idSucursal, double limiteCredito) {
         super(numeroCuenta, saldoInicial, cliente);
+        setIdSucursal(idSucursal);
         this.limiteCredito = limiteCredito;
     }
 
     @Override
     public boolean retirar(double monto) {
+        boolean realizado = false;
         if (monto > 0 && monto <= getFondosDisponibles()) {
             setSaldo(getSaldo() - monto);
-            return true;
+            realizado = true;
         }
-        return false;
+        return realizado;
     }
 
     @Override
     public double getFondosDisponibles() {
-        return getSaldo() + this.limiteCredito;
+        return getSaldo() + limiteCredito;
+    }
+
+    @Override
+    public TipoCuenta obtenerTipoCuenta() {
+        return TipoCuenta.CORRIENTE;
     }
 
     public double getLimiteCredito() {

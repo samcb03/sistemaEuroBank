@@ -3,7 +3,7 @@ package uv.lis.controlador;
 import uv.lis.modelo.DatosFormularioEmpleado;
 import uv.lis.modelo.Empleado;
 import uv.lis.modelo.FabricaEmpleados;
-import uv.lis.modelo.RepositorioEmpleados;
+import uv.lis.modelo.DAO.implementacion.EmpleadoDAO;
 import uv.lis.modelo.excepcion.DatosEmpleadoInvalidosException;
 import uv.lis.modelo.excepcion.EmpleadoDuplicadoException;
 import uv.lis.modelo.excepcion.EmpleadoNoEncontradoException;
@@ -13,13 +13,13 @@ import uv.lis.vista.VistaEmpleados;
 public class ControladorEmpleados {
 
     private final VistaEmpleados vistaEmpleados;
-    private final RepositorioEmpleados repositorioEmpleados;
+    private final EmpleadoDAO repositorioEmpleados;
     private final FabricaEmpleados fabricaEmpleados;
     private final DialogoEmpleado dialogoEmpleado;
 
     private boolean propietarioDialogoEstablecido;
 
-    public ControladorEmpleados(VistaEmpleados vistaEmpleados, RepositorioEmpleados repositorioEmpleados) {
+    public ControladorEmpleados(VistaEmpleados vistaEmpleados, EmpleadoDAO repositorioEmpleados) {
         this.vistaEmpleados = vistaEmpleados;
         this.repositorioEmpleados = repositorioEmpleados;
         this.fabricaEmpleados = new FabricaEmpleados();

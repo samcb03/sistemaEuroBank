@@ -2,11 +2,13 @@ package uv.lis.modelo;
 
 import java.util.Optional;
 
+import uv.lis.modelo.DAO.implementacion.EmpleadoDAO;
+
 public class ServicioAutenticacion {
 
-    private final RepositorioEmpleados repositorioEmpleados;
+    private final EmpleadoDAO repositorioEmpleados;
 
-    public ServicioAutenticacion(RepositorioEmpleados repositorioEmpleados) {
+    public ServicioAutenticacion(EmpleadoDAO repositorioEmpleados) {
         this.repositorioEmpleados = repositorioEmpleados;
     }
 

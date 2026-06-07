@@ -2,18 +2,18 @@ package uv.lis.controlador;
 
 import uv.lis.modelo.CuentaBancaria;
 import uv.lis.modelo.CuentaEmpresarial;
+import uv.lis.modelo.DAO.implementacion.CuentaDAO;
 import uv.lis.modelo.excepcion.CuentaDuplicadaException;
 import uv.lis.modelo.excepcion.CuentaNoEncontradaException;
 import uv.lis.modelo.excepcion.SaldoInsuficienteException;
 import uv.lis.vista.VistaCuenta;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 public class CuentaControlador {
 
-    private final List<CuentaBancaria> cuentas = new ArrayList<>();
+    private final CuentaDAO repositorioCuenta = new CuentaDAO();
     private VistaCuenta vista;
 
     public void iniciar(VistaCuenta vista) {
@@ -29,11 +29,7 @@ public class CuentaControlador {
         if (cuenta.getNumeroCuenta() == null || cuenta.getNumeroCuenta().isBlank()) {
             throw new IllegalArgumentException("El número de cuenta es obligatorio.");
         }
-        if (existeCuenta(cuenta.getNumeroCuenta())) {
-            throw new CuentaDuplicadaException(
-                "Ya existe una cuenta con el número: " + cuenta.getNumeroCuenta());
-        }
-        cuentas.add(cuenta);
+        repositorioCuenta.agregar(cuenta);
     }
 
     public void cerrarCuenta(String numeroCuenta)
@@ -44,7 +40,7 @@ public class CuentaControlador {
                 "La cuenta " + numeroCuenta + " aún tiene saldo $"
                 + cuenta.getSaldo() + ". Debe ser $0 para cerrarla.");
         }
-        cuentas.remove(cuenta);
+        repositorioCuenta.eliminar(numeroCuenta);
     }
 
     public void modificarLimiteCredito(String numeroCuenta, double nuevoLimite)
@@ -55,21 +51,19 @@ public class CuentaControlador {
                 "Solo las cuentas empresariales permiten modificar el límite de crédito.");
         }
         ((CuentaEmpresarial) cuenta).setLimiteCredito(nuevoLimite);
+        repositorioCuenta.actualizar(cuenta);
     }
 
     public Optional<CuentaBancaria> buscarCuenta(String numeroCuenta) {
-        return cuentas.stream()
-            .filter(c -> c.getNumeroCuenta().equals(numeroCuenta))
-            .findFirst();
+        return repositorioCuenta.buscarPorNumero(numeroCuenta);
     }
 
     public boolean existeCuenta(String numeroCuenta) {
-        return cuentas.stream()
-            .anyMatch(c -> c.getNumeroCuenta().equals(numeroCuenta));
+        return repositorioCuenta.existe(numeroCuenta);
     }
 
     public List<CuentaBancaria> obtenerTodasLasCuentas() {
-        return new ArrayList<>(cuentas);
+        return repositorioCuenta.obtenerTodas();
     }
 
     private void solicitarAbrirCuenta() {
@@ -95,8 +89,11 @@ public class CuentaControlador {
 
     private CuentaBancaria buscarCuentaOExcepcion(String numeroCuenta)
             throws CuentaNoEncontradaException {
-        return buscarCuenta(numeroCuenta)
-            .orElseThrow(() -> new CuentaNoEncontradaException(
-                "No se encontró ninguna cuenta con el número: " + numeroCuenta));
+        Optional<CuentaBancaria> cuentaEncontrada = repositorioCuenta.buscarPorNumero(numeroCuenta);
+        if (!cuentaEncontrada.isPresent()) {
+            throw new CuentaNoEncontradaException(
+                "No se encontró ninguna cuenta con el número: " + numeroCuenta);
+        }
+        return cuentaEncontrada.get();
     }
 }

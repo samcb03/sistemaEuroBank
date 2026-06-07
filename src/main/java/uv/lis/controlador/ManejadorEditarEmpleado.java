@@ -16,4 +16,3 @@ public class ManejadorEditarEmpleado implements EventHandler<ActionEvent> {
         controladorEmpleados.solicitarEditarEmpleado();
     }
 }
-

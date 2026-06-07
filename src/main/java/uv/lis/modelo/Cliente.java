@@ -51,7 +51,6 @@ public class Cliente {
         return nombre + " " + apellidos;
     }
 
-    // Getters y setters
     public String getRfcCurp() { return rfcCurp; }
     public void setRfcCurp(String rfcCurp) { this.rfcCurp = rfcCurp; }
 
