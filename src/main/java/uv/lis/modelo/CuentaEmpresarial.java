@@ -27,8 +27,8 @@ public class CuentaEmpresarial extends CuentaBancaria {
     }
 
     @Override
-    public TipoCuenta obtenerTipoCuenta() {
-        return TipoCuenta.EMPRESARIAL;
+    public String obtenerTipoCuenta() {
+        return CatalogoTipoCuenta.EMPRESARIAL;
     }
 
     public double getLimiteCredito() {

@@ -26,7 +26,7 @@ public abstract class CuentaBancaria {
      * Devuelve el subtipo concreto de la cuenta. Sustituye a las
      * comprobaciones instanceof en la capa de persistencia.
      */
-    public abstract TipoCuenta obtenerTipoCuenta();
+    public abstract String obtenerTipoCuenta();
 
     public String getNumeroCuenta() {
         return numeroCuenta;

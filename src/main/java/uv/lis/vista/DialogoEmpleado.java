@@ -20,13 +20,13 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Window;
 import uv.lis.modelo.Cajero;
 import uv.lis.modelo.DatosFormularioEmpleado;
+import uv.lis.modelo.CatalogoEspecializacionEjecutivo;
+import uv.lis.modelo.CatalogoGenero;
+import uv.lis.modelo.CatalogoNivelAccesoGerente;
+import uv.lis.modelo.CatalogoRol;
 import uv.lis.modelo.EjecutivoCuenta;
 import uv.lis.modelo.Empleado;
-import uv.lis.modelo.EspecializacionEjecutivo;
-import uv.lis.modelo.Genero;
 import uv.lis.modelo.Gerente;
-import uv.lis.modelo.NivelAccesoGerente;
-import uv.lis.modelo.Rol;
 
 public class DialogoEmpleado {
 
@@ -38,17 +38,17 @@ public class DialogoEmpleado {
     private final TextField campoNombre;
     private final TextField campoDireccion;
     private final DatePicker selectorFechaNacimiento;
-    private final ComboBox<Genero> selectorGenero;
+    private final ComboBox<String> selectorGenero;
     private final TextField campoSalario;
     private final TextField campoUsuario;
     private final PasswordField campoContrasenia;
-    private final ComboBox<Rol> selectorRol;
+    private final ComboBox<String> selectorRol;
     private final TextField campoHoraInicio;
     private final TextField campoHoraFin;
     private final TextField campoVentanilla;
     private final TextField campoClientes;
-    private final ComboBox<EspecializacionEjecutivo> selectorEspecializacion;
-    private final ComboBox<NivelAccesoGerente> selectorNivelAcceso;
+    private final ComboBox<String> selectorEspecializacion;
+    private final ComboBox<String> selectorNivelAcceso;
     private final TextField campoExperiencia;
     private final GridPane seccionCajero;
     private final GridPane seccionEjecutivo;
@@ -81,27 +81,27 @@ public class DialogoEmpleado {
         registrarManejadorTipo();
     }
 
-    private ComboBox<Genero> crearSelectorGenero() {
-        ComboBox<Genero> selector = new ComboBox<Genero>();
-        selector.getItems().addAll(Genero.values());
+    private ComboBox<String> crearSelectorGenero() {
+        ComboBox<String> selector = new ComboBox<String>();
+        selector.getItems().addAll(CatalogoGenero.valores());
         return selector;
     }
 
-    private ComboBox<Rol> crearSelectorRol() {
-        ComboBox<Rol> selector = new ComboBox<Rol>();
-        selector.getItems().addAll(Rol.values());
+    private ComboBox<String> crearSelectorRol() {
+        ComboBox<String> selector = new ComboBox<String>();
+        selector.getItems().addAll(CatalogoRol.valores());
         return selector;
     }
 
-    private ComboBox<EspecializacionEjecutivo> crearSelectorEspecializacion() {
-        ComboBox<EspecializacionEjecutivo> selector = new ComboBox<EspecializacionEjecutivo>();
-        selector.getItems().addAll(EspecializacionEjecutivo.values());
+    private ComboBox<String> crearSelectorEspecializacion() {
+        ComboBox<String> selector = new ComboBox<String>();
+        selector.getItems().addAll(CatalogoEspecializacionEjecutivo.valores());
         return selector;
     }
 
-    private ComboBox<NivelAccesoGerente> crearSelectorNivelAcceso() {
-        ComboBox<NivelAccesoGerente> selector = new ComboBox<NivelAccesoGerente>();
-        selector.getItems().addAll(NivelAccesoGerente.values());
+    private ComboBox<String> crearSelectorNivelAcceso() {
+        ComboBox<String> selector = new ComboBox<String>();
+        selector.getItems().addAll(CatalogoNivelAccesoGerente.valores());
         return selector;
     }
 
@@ -280,10 +280,10 @@ public class DialogoEmpleado {
     }
 
     private void actualizarVisibilidadSecciones() {
-        Rol rolSeleccionado = selectorRol.getValue();
-        establecerVisibilidad(seccionCajero, rolSeleccionado == Rol.CAJERO);
-        establecerVisibilidad(seccionEjecutivo, rolSeleccionado == Rol.EJECUTIVO);
-        establecerVisibilidad(seccionGerente, rolSeleccionado == Rol.GERENTE);
+        String rolSeleccionado = selectorRol.getValue();
+        establecerVisibilidad(seccionCajero, CatalogoRol.CAJERO.equals(rolSeleccionado));
+        establecerVisibilidad(seccionEjecutivo, CatalogoRol.EJECUTIVO.equals(rolSeleccionado));
+        establecerVisibilidad(seccionGerente, CatalogoRol.GERENTE.equals(rolSeleccionado));
         ajustarTamanioVentana();
     }
 
@@ -299,7 +299,7 @@ public class DialogoEmpleado {
         nodo.setManaged(visible);
     }
 
-    private static class ManejadorSeleccionTipo implements ChangeListener<Rol> {
+    private static class ManejadorSeleccionTipo implements ChangeListener<String> {
 
         private final DialogoEmpleado dialogoEmpleado;
 
@@ -308,9 +308,9 @@ public class DialogoEmpleado {
         }
 
         @Override
-        public void changed(ObservableValue<? extends Rol> propiedadObservada,
-                            Rol valorAnterior,
-                            Rol valorNuevo) {
+        public void changed(ObservableValue<? extends String> propiedadObservada,
+                            String valorAnterior,
+                            String valorNuevo) {
             dialogoEmpleado.actualizarVisibilidadSecciones();
         }
     }

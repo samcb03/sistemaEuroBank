@@ -10,6 +10,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import uv.lis.modelo.CatalogoRol;
 import uv.lis.modelo.Empleado;
 
 public class VistaMenuPrincipal {
@@ -42,7 +43,7 @@ public class VistaMenuPrincipal {
         etiquetaTitulo.setFont(Font.font("System", FontWeight.BOLD, 20));
 
         Label etiquetaUsuario = new Label("Usuario: " + empleadoAutenticado.getNombreCompleto()
-                + " | Rol: " + empleadoAutenticado.obtenerRol().obtenerNombreVisible());
+                + " | Rol: " + CatalogoRol.nombreVisible(empleadoAutenticado.obtenerRol()));
 
         GridPane panelModulos = construirPanelModulos();
 

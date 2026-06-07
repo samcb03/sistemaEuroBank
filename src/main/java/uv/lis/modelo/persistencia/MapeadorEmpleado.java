@@ -12,11 +12,8 @@ import uv.lis.modelo.Administrador;
 import uv.lis.modelo.Cajero;
 import uv.lis.modelo.EjecutivoCuenta;
 import uv.lis.modelo.Empleado;
-import uv.lis.modelo.EspecializacionEjecutivo;
-import uv.lis.modelo.Genero;
+import uv.lis.modelo.CatalogoRol;
 import uv.lis.modelo.Gerente;
-import uv.lis.modelo.NivelAccesoGerente;
-import uv.lis.modelo.Rol;
 
 /**
  * Traduce entre filas de la tabla "empleado" y la jerarquia Empleado.
@@ -26,21 +23,16 @@ import uv.lis.modelo.Rol;
 public class MapeadorEmpleado {
 
     public Empleado mapearDesdeFila(ResultSet fila) throws SQLException {
-        Rol rol = Rol.valueOf(fila.getString("rol"));
+        String rol = fila.getString("rol");
         Empleado empleado;
-        switch (rol) {
-            case ADMINISTRADOR:
-                empleado = construirAdministrador(fila);
-                break;
-            case GERENTE:
-                empleado = construirGerente(fila);
-                break;
-            case CAJERO:
-                empleado = construirCajero(fila);
-                break;
-            default:
-                empleado = construirEjecutivo(fila);
-                break;
+        if (CatalogoRol.ADMINISTRADOR.equals(rol)) {
+            empleado = construirAdministrador(fila);
+        } else if (CatalogoRol.GERENTE.equals(rol)) {
+            empleado = construirGerente(fila);
+        } else if (CatalogoRol.CAJERO.equals(rol)) {
+            empleado = construirCajero(fila);
+        } else {
+            empleado = construirEjecutivo(fila);
         }
         return empleado;
     }
@@ -63,11 +55,11 @@ public class MapeadorEmpleado {
         sentencia.setString(indice++, empleado.getNombreCompleto());
         sentencia.setString(indice++, empleado.getDireccion());
         sentencia.setDate(indice++, Date.valueOf(empleado.getFechaNacimiento()));
-        sentencia.setString(indice++, empleado.getGenero().name());
+        sentencia.setString(indice++, empleado.getGenero());
         sentencia.setDouble(indice++, empleado.getSalario());
         sentencia.setString(indice++, empleado.getNombreUsuario());
         sentencia.setString(indice++, empleado.getContrasenia());
-        sentencia.setString(indice++, empleado.obtenerRol().name());
+        sentencia.setString(indice++, empleado.obtenerRol());
         indice = asignarColumnasEspecificas(sentencia, empleado, indice);
         sentencia.setNull(indice++, Types.VARCHAR);
         return indice;
@@ -75,19 +67,15 @@ public class MapeadorEmpleado {
 
     private int asignarColumnasEspecificas(PreparedStatement sentencia, Empleado empleado, int inicio)
             throws SQLException {
-        switch (empleado.obtenerRol()) {
-            case CAJERO:
-                asignarEspecificasCajero(sentencia, (Cajero) empleado, inicio);
-                break;
-            case EJECUTIVO:
-                asignarEspecificasEjecutivo(sentencia, (EjecutivoCuenta) empleado, inicio);
-                break;
-            case GERENTE:
-                asignarEspecificasGerente(sentencia, (Gerente) empleado, inicio);
-                break;
-            default:
-                asignarEspecificasNulas(sentencia, inicio);
-                break;
+        String rol = empleado.obtenerRol();
+        if (CatalogoRol.CAJERO.equals(rol)) {
+            asignarEspecificasCajero(sentencia, (Cajero) empleado, inicio);
+        } else if (CatalogoRol.EJECUTIVO.equals(rol)) {
+            asignarEspecificasEjecutivo(sentencia, (EjecutivoCuenta) empleado, inicio);
+        } else if (CatalogoRol.GERENTE.equals(rol)) {
+            asignarEspecificasGerente(sentencia, (Gerente) empleado, inicio);
+        } else {
+            asignarEspecificasNulas(sentencia, inicio);
         }
         int indiceSiguiente = inicio + 7;
         return indiceSiguiente;
@@ -110,7 +98,7 @@ public class MapeadorEmpleado {
         sentencia.setNull(inicio + 1, Types.TIME);
         sentencia.setNull(inicio + 2, Types.INTEGER);
         sentencia.setInt(inicio + 3, ejecutivo.getNumeroClientesAsignados());
-        sentencia.setString(inicio + 4, ejecutivo.getEspecializacion().name());
+        sentencia.setString(inicio + 4, ejecutivo.getEspecializacion());
         sentencia.setNull(inicio + 5, Types.VARCHAR);
         sentencia.setNull(inicio + 6, Types.INTEGER);
     }
@@ -122,7 +110,7 @@ public class MapeadorEmpleado {
         sentencia.setNull(inicio + 2, Types.INTEGER);
         sentencia.setNull(inicio + 3, Types.INTEGER);
         sentencia.setNull(inicio + 4, Types.VARCHAR);
-        sentencia.setString(inicio + 5, gerente.getNivelAcceso().name());
+        sentencia.setString(inicio + 5, gerente.getNivelAcceso());
         sentencia.setInt(inicio + 6, gerente.getAniosExperiencia());
     }
 
@@ -142,7 +130,7 @@ public class MapeadorEmpleado {
                 fila.getString("nombre_completo"),
                 fila.getString("direccion"),
                 leerFechaNacimiento(fila),
-                Genero.valueOf(fila.getString("genero")),
+                fila.getString("genero"),
                 fila.getDouble("salario"),
                 fila.getString("nombre_usuario"),
                 fila.getString("contrasenia"));
@@ -155,11 +143,11 @@ public class MapeadorEmpleado {
                 fila.getString("nombre_completo"),
                 fila.getString("direccion"),
                 leerFechaNacimiento(fila),
-                Genero.valueOf(fila.getString("genero")),
+                fila.getString("genero"),
                 fila.getDouble("salario"),
                 fila.getString("nombre_usuario"),
                 fila.getString("contrasenia"),
-                NivelAccesoGerente.valueOf(fila.getString("nivel_acceso")),
+                fila.getString("nivel_acceso"),
                 fila.getInt("anios_experiencia"));
         return gerente;
     }
@@ -170,7 +158,7 @@ public class MapeadorEmpleado {
                 fila.getString("nombre_completo"),
                 fila.getString("direccion"),
                 leerFechaNacimiento(fila),
-                Genero.valueOf(fila.getString("genero")),
+                fila.getString("genero"),
                 fila.getDouble("salario"),
                 fila.getString("nombre_usuario"),
                 fila.getString("contrasenia"),
@@ -186,12 +174,12 @@ public class MapeadorEmpleado {
                 fila.getString("nombre_completo"),
                 fila.getString("direccion"),
                 leerFechaNacimiento(fila),
-                Genero.valueOf(fila.getString("genero")),
+                fila.getString("genero"),
                 fila.getDouble("salario"),
                 fila.getString("nombre_usuario"),
                 fila.getString("contrasenia"),
                 fila.getInt("numero_clientes_asignados"),
-                EspecializacionEjecutivo.valueOf(fila.getString("especializacion")));
+                fila.getString("especializacion"));
         return ejecutivo;
     }
 

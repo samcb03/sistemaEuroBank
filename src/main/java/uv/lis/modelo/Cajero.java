@@ -17,7 +17,7 @@ public class Cajero extends Empleado {
                   String nombreCompleto,
                   String direccion,
                   LocalDate fechaNacimiento,
-                  Genero genero,
+                  String genero,
                   double salario,
                   String nombreUsuario,
                   String contrasenia,
@@ -73,7 +73,7 @@ public class Cajero extends Empleado {
     }
 
     @Override
-    public Rol obtenerRol() {
-        return Rol.CAJERO;
+    public String obtenerRol() {
+        return CatalogoRol.CAJERO;
     }
 }

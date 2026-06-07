@@ -6,18 +6,18 @@ public class Gerente extends Empleado {
 
     private static final long serialVersionUID = 1L;
 
-    private NivelAccesoGerente nivelAcceso;
+    private String nivelAcceso;
     private int aniosExperiencia;
 
     public Gerente(String idEmpleado,
                    String nombreCompleto,
                    String direccion,
                    LocalDate fechaNacimiento,
-                   Genero genero,
+                   String genero,
                    double salario,
                    String nombreUsuario,
                    String contrasenia,
-                   NivelAccesoGerente nivelAcceso,
+                   String nivelAcceso,
                    int aniosExperiencia) {
         super(idEmpleado, nombreCompleto, direccion, fechaNacimiento,
               genero, salario, nombreUsuario, contrasenia);
@@ -25,11 +25,11 @@ public class Gerente extends Empleado {
         this.aniosExperiencia = aniosExperiencia;
     }
 
-    public NivelAccesoGerente getNivelAcceso() {
+    public String getNivelAcceso() {
         return nivelAcceso;
     }
 
-    public void setNivelAcceso(NivelAccesoGerente nivelAcceso) {
+    public void setNivelAcceso(String nivelAcceso) {
         this.nivelAcceso = nivelAcceso;
     }
 
@@ -46,13 +46,13 @@ public class Gerente extends Empleado {
     }
 
     public boolean tieneAccesoNacional() {
-        boolean accesoNacional = nivelAcceso == NivelAccesoGerente.NACIONAL;
+        boolean accesoNacional = CatalogoNivelAccesoGerente.NACIONAL.equals(nivelAcceso);
         return accesoNacional;
     }
 
     public boolean puedeAdministrarRegion() {
-        boolean puedeRegion = nivelAcceso == NivelAccesoGerente.REGIONAL
-                || nivelAcceso == NivelAccesoGerente.NACIONAL;
+        boolean puedeRegion = CatalogoNivelAccesoGerente.REGIONAL.equals(nivelAcceso)
+                || CatalogoNivelAccesoGerente.NACIONAL.equals(nivelAcceso);
         return puedeRegion;
     }
 
@@ -62,7 +62,7 @@ public class Gerente extends Empleado {
     }
 
     @Override
-    public Rol obtenerRol() {
-        return Rol.GERENTE;
+    public String obtenerRol() {
+        return CatalogoRol.GERENTE;
     }
 }

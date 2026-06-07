@@ -7,18 +7,18 @@ public class EjecutivoCuenta extends Empleado {
     private static final long serialVersionUID = 1L;
 
     private int numeroClientesAsignados;
-    private EspecializacionEjecutivo especializacion;
+    private String especializacion;
 
     public EjecutivoCuenta(String idEmpleado,
                            String nombreCompleto,
                            String direccion,
                            LocalDate fechaNacimiento,
-                           Genero genero,
+                           String genero,
                            double salario,
                            String nombreUsuario,
                            String contrasenia,
                            int numeroClientesAsignados,
-                           EspecializacionEjecutivo especializacion) {
+                           String especializacion) {
         super(idEmpleado, nombreCompleto, direccion, fechaNacimiento,
               genero, salario, nombreUsuario, contrasenia);
         this.numeroClientesAsignados = numeroClientesAsignados;
@@ -33,11 +33,11 @@ public class EjecutivoCuenta extends Empleado {
         this.numeroClientesAsignados = numeroClientesAsignados;
     }
 
-    public EspecializacionEjecutivo getEspecializacion() {
+    public String getEspecializacion() {
         return especializacion;
     }
 
-    public void setEspecializacion(EspecializacionEjecutivo especializacion) {
+    public void setEspecializacion(String especializacion) {
         this.especializacion = especializacion;
     }
 
@@ -51,8 +51,8 @@ public class EjecutivoCuenta extends Empleado {
         }
     }
 
-    public boolean atiendeEspecializacion(EspecializacionEjecutivo especializacionConsultada) {
-        boolean coincide = especializacion == especializacionConsultada;
+    public boolean atiendeEspecializacion(String especializacionConsultada) {
+        boolean coincide = especializacion != null && especializacion.equals(especializacionConsultada);
         return coincide;
     }
 
@@ -62,7 +62,7 @@ public class EjecutivoCuenta extends Empleado {
     }
 
     @Override
-    public Rol obtenerRol() {
-        return Rol.EJECUTIVO;
+    public String obtenerRol() {
+        return CatalogoRol.EJECUTIVO;
     }
 }

@@ -13,7 +13,7 @@ public abstract class Empleado implements Serializable {
     private String nombreCompleto;
     private String direccion;
     private LocalDate fechaNacimiento;
-    private Genero genero;
+    private String genero;
     private double salario;
     private String nombreUsuario;
     private String contrasenia;
@@ -22,7 +22,7 @@ public abstract class Empleado implements Serializable {
                        String nombreCompleto,
                        String direccion,
                        LocalDate fechaNacimiento,
-                       Genero genero,
+                       String genero,
                        double salario,
                        String nombreUsuario,
                        String contrasenia) {
@@ -68,11 +68,11 @@ public abstract class Empleado implements Serializable {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public Genero getGenero() {
+    public String getGenero() {
         return genero;
     }
 
-    public void setGenero(Genero genero) {
+    public void setGenero(String genero) {
         this.genero = genero;
     }
 
@@ -140,7 +140,7 @@ public abstract class Empleado implements Serializable {
         return resultado;
     }
 
-    public abstract Rol obtenerRol();
+    public abstract String obtenerRol();
 
     @Override
     public int hashCode() {

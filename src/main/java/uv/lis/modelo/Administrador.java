@@ -10,7 +10,7 @@ public class Administrador extends Empleado {
                          String nombreCompleto,
                          String direccion,
                          LocalDate fechaNacimiento,
-                         Genero genero,
+                         String genero,
                          double salario,
                          String nombreUsuario,
                          String contrasenia) {
@@ -24,7 +24,7 @@ public class Administrador extends Empleado {
     }
 
     @Override
-    public Rol obtenerRol() {
-        return Rol.ADMINISTRADOR;
+    public String obtenerRol() {
+        return CatalogoRol.ADMINISTRADOR;
     }
 }

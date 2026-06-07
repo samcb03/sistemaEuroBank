@@ -71,12 +71,12 @@ public class FabricaEmpleados {
     }
 
     private void agregarErroresEspecificos(DatosFormularioEmpleado datos, List<String> errores) {
-        Rol rol = datos.getRol();
-        if (rol == Rol.CAJERO) {
+        String rol = datos.getRol();
+        if (CatalogoRol.CAJERO.equals(rol)) {
             agregarErroresCajero(datos, errores);
-        } else if (rol == Rol.EJECUTIVO) {
+        } else if (CatalogoRol.EJECUTIVO.equals(rol)) {
             agregarErroresEjecutivo(datos, errores);
-        } else if (rol == Rol.GERENTE) {
+        } else if (CatalogoRol.GERENTE.equals(rol)) {
             agregarErroresGerente(datos, errores);
         }
     }
@@ -125,19 +125,15 @@ public class FabricaEmpleados {
 
     private Empleado construirEmpleadoValido(DatosFormularioEmpleado datos) {
         Empleado empleado;
-        switch (datos.getRol()) {
-            case ADMINISTRADOR:
-                empleado = construirAdministrador(datos);
-                break;
-            case GERENTE:
-                empleado = construirGerente(datos);
-                break;
-            case CAJERO:
-                empleado = construirCajero(datos);
-                break;
-            default:
-                empleado = construirEjecutivo(datos);
-                break;
+        String rol = datos.getRol();
+        if (CatalogoRol.ADMINISTRADOR.equals(rol)) {
+            empleado = construirAdministrador(datos);
+        } else if (CatalogoRol.GERENTE.equals(rol)) {
+            empleado = construirGerente(datos);
+        } else if (CatalogoRol.CAJERO.equals(rol)) {
+            empleado = construirCajero(datos);
+        } else {
+            empleado = construirEjecutivo(datos);
         }
         return empleado;
     }

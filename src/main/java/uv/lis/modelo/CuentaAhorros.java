@@ -27,8 +27,8 @@ public class CuentaAhorros extends CuentaBancaria {
     }
 
     @Override
-    public TipoCuenta obtenerTipoCuenta() {
-        return TipoCuenta.AHORROS;
+    public String obtenerTipoCuenta() {
+        return CatalogoTipoCuenta.AHORROS;
     }
 
     public void aplicarInteres() {
