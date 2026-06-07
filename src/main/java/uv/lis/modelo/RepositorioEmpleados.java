@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import uv.lis.modelo.excepcion.EmpleadoDuplicadoException;
 import uv.lis.modelo.excepcion.EmpleadoNoEncontradoException;
 
@@ -34,23 +35,11 @@ public class RepositorioEmpleados {
     }
 
     public Optional<Empleado> buscarPorNombreUsuario(String nombreUsuario) {
-        Optional<Empleado> empleadoEncontrado = Optional.empty();
-        for (Empleado empleado : empleados) {
-            if (empleado.getNombreUsuario().equals(nombreUsuario)) {
-                empleadoEncontrado = Optional.of(empleado);
-            }
-        }
-        return empleadoEncontrado;
+        return buscarPrimero(empleado -> empleado.getNombreUsuario().equals(nombreUsuario));
     }
 
     public Optional<Empleado> buscarPorId(String idEmpleado) {
-        Optional<Empleado> empleadoEncontrado = Optional.empty();
-        for (Empleado empleado : empleados) {
-            if (empleado.getIdEmpleado().equals(idEmpleado)) {
-                empleadoEncontrado = Optional.of(empleado);
-            }
-        }
-        return empleadoEncontrado;
+        return buscarPrimero(empleado -> empleado.getIdEmpleado().equals(idEmpleado));
     }
 
     public List<Empleado> obtenerTodos() {
@@ -88,8 +77,18 @@ public class RepositorioEmpleados {
         empleados.remove(indice);
     }
 
+    private Optional<Empleado> buscarPrimero(Predicate<Empleado> condicionBusqueda) {
+        Optional<Empleado> empleadoEncontrado = Optional.empty();
+        for (Empleado empleado : empleados) {
+            if (condicionBusqueda.test(empleado)) {
+                empleadoEncontrado = Optional.of(empleado);
+            }
+        }
+        return empleadoEncontrado;
+    }
+
     private boolean existeId(String idEmpleado) {
-        boolean existe = obtenerIndicePorId(idEmpleado) != INDICE_NO_ENCONTRADO;
+        boolean existe = buscarPorId(idEmpleado).isPresent();
         return existe;
     }
 
