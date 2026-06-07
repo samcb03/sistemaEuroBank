@@ -3,8 +3,8 @@ package uv.lis;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import uv.lis.controlador.ControladorLogin;
-import uv.lis.modelo.RepositorioEmpleados;
 import uv.lis.modelo.ServicioAutenticacion;
+import uv.lis.modelo.DAO.implementacion.EmpleadoDAO;
 import uv.lis.vista.VistaLogin;
 
 public class AplicacionEuroBank extends Application {
@@ -13,7 +13,7 @@ public class AplicacionEuroBank extends Application {
 
     @Override
     public void start(Stage escenarioPrincipal) {
-        RepositorioEmpleados repositorioEmpleados = new RepositorioEmpleados();
+        EmpleadoDAO repositorioEmpleados = new EmpleadoDAO();
         ServicioAutenticacion servicioAutenticacion = new ServicioAutenticacion(repositorioEmpleados);
         VistaLogin vistaLogin = new VistaLogin();
         ControladorLogin controladorLogin =

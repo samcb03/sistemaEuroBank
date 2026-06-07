@@ -5,14 +5,14 @@ public abstract class CuentaBancaria {
     private String numeroCuenta;
     private double saldo;
     private Cliente cliente;
-
+    private String idSucursal;
 
     public CuentaBancaria(String numeroCuenta, double saldoInicial, Cliente cliente) {
         this.numeroCuenta = numeroCuenta;
         this.saldo = saldoInicial;
         this.cliente = cliente;
+        this.idSucursal = "";
     }
-
 
     public void depositar(double monto) {
         saldo += monto;
@@ -20,35 +20,58 @@ public abstract class CuentaBancaria {
 
     public abstract boolean retirar(double monto);
 
-
     public abstract double getFondosDisponibles();
 
+    /**
+     * Devuelve el subtipo concreto de la cuenta. Sustituye a las
+     * comprobaciones instanceof en la capa de persistencia.
+     */
+    public abstract TipoCuenta obtenerTipoCuenta();
 
-    public String getNumeroCuenta() { 
-        return numeroCuenta; 
-    }
-    public void setNumeroCuenta(String numeroCuenta) { 
-        this.numeroCuenta = numeroCuenta; 
+    public String getNumeroCuenta() {
+        return numeroCuenta;
     }
 
-
-    public double getSaldo() { 
-        return saldo; 
+    public void setNumeroCuenta(String numeroCuenta) {
+        this.numeroCuenta = numeroCuenta;
     }
-    public void setSaldo(double saldo) { 
-        this.saldo = saldo; 
+
+    public double getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
+    }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
+
+    public void setCliente(Cliente cliente) {
+        this.cliente = cliente;
+    }
+
+    public String getIdSucursal() {
+        return idSucursal;
+    }
+
+    public void setIdSucursal(String idSucursal) {
+        this.idSucursal = idSucursal;
     }
 
     @Override
     public boolean equals(Object obj) {
+        boolean resultado;
         if (this == obj) {
-            return true;
+            resultado = true;
+        } else if (!(obj instanceof CuentaBancaria)) {
+            resultado = false;
+        } else {
+            CuentaBancaria otra = (CuentaBancaria) obj;
+            resultado = numeroCuenta != null && numeroCuenta.equals(otra.numeroCuenta);
         }
-        if (!(obj instanceof CuentaBancaria)) {
-            return false;
-        }
-        CuentaBancaria other = (CuentaBancaria) obj;
-        return numeroCuenta != null && numeroCuenta.equals(other.numeroCuenta);
+        return resultado;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package uv.lis.controlador;
 
-import uv.lis.modelo.RepositorioSucursales;
+import uv.lis.modelo.SucursalDAO;
 import uv.lis.modelo.Sucursal;
 import uv.lis.modelo.excepcion.PersistenciaSucursalException;
 import uv.lis.modelo.excepcion.SucursalDuplicadaException;
@@ -11,12 +11,12 @@ import uv.lis.vista.VistaSucursales;
 public class ControladorSucursales {
 
     private final VistaSucursales vistaSucursales;
-    private final RepositorioSucursales repositorioSucursales;
+    private final SucursalDAO repositorioSucursales;
     private final DialogoSucursal dialogoSucursal;
     private boolean propietarioDialogoEstablecido;
 
     public ControladorSucursales(VistaSucursales vistaSucursales,
-                                 RepositorioSucursales repositorioSucursales) {
+                                 SucursalDAO repositorioSucursales) {
         this.vistaSucursales = vistaSucursales;
         this.repositorioSucursales = repositorioSucursales;
         this.dialogoSucursal = new DialogoSucursal();

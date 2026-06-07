@@ -140,4 +140,3 @@ public class VistaEmpleados {
         alerta.showAndWait();
     }
 }
-

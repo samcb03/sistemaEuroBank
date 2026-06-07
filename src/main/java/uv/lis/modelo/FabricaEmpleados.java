@@ -7,13 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import uv.lis.modelo.excepcion.DatosEmpleadoInvalidosException;
 
-/**
- * Valida los datos capturados en el formulario y construye la subclase
- * de {@link Empleado} que corresponde al rol seleccionado.
- *
- * Concentra en un solo lugar las validaciones de obligatoriedad y formato,
- * de modo que la vista solo capture y el repositorio solo persista.
- */
 public class FabricaEmpleados {
 
     private static final DateTimeFormatter FORMATO_HORA = DateTimeFormatter.ofPattern("HH:mm");

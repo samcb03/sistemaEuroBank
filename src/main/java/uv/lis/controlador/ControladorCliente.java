@@ -1,25 +1,25 @@
 package uv.lis.controlador;
 
 import uv.lis.modelo.Cliente;
+import uv.lis.modelo.DAO.implementacion.ClienteDAO;
 import uv.lis.modelo.excepcion.ClienteDuplicadoException;
 import uv.lis.modelo.excepcion.ClienteNoEncontradoException;
 import uv.lis.vista.DialogoCliente;
 import uv.lis.vista.VistaCliente;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 public class ControladorCliente {
 
-    private final List<Cliente>    clientes;
-    private final DialogoCliente   dialogoCliente;
-    private       VistaCliente     vista;
-    private       boolean          propietarioDialogoEstablecido;
+    private final ClienteDAO repositorioCliente;
+    private final DialogoCliente     dialogoCliente;
+    private       VistaCliente       vista;
+    private       boolean            propietarioDialogoEstablecido;
 
     public ControladorCliente() {
-        this.clientes                    = new ArrayList<>();
-        this.dialogoCliente              = new DialogoCliente();
+        this.repositorioCliente            = new ClienteDAO();
+        this.dialogoCliente                = new DialogoCliente();
         this.propietarioDialogoEstablecido = false;
     }
 
@@ -41,42 +41,34 @@ public class ControladorCliente {
     }
 
     public List<Cliente> obtenerTodosLosClientes() {
-        return new ArrayList<>(clientes);
+        return repositorioCliente.obtenerTodos();
     }
 
     public void registrarCliente(Cliente cliente) throws ClienteDuplicadoException {
-        if (existeCliente(cliente.getRfcCurp())) {
-            throw new ClienteDuplicadoException(
-                "Ya existe un cliente con RFC/CURP: " + cliente.getRfcCurp());
-        }
-        clientes.add(cliente);
+        repositorioCliente.agregar(cliente);
     }
 
     public void actualizarCliente(Cliente clienteModificado)
             throws ClienteNoEncontradoException {
-        Cliente existente = buscarClientePorRfc(clienteModificado.getRfcCurp());
-        int indice = clientes.indexOf(existente);
-        clientes.set(indice, clienteModificado);
+        repositorioCliente.actualizar(clienteModificado);
     }
 
     public void eliminarCliente(String rfcCurp)
             throws ClienteNoEncontradoException {
-        Cliente cliente = buscarClientePorRfc(rfcCurp);
-        if (cliente.tieneCuentasActivas()) {
+        Optional<Cliente> clienteEncontrado = repositorioCliente.buscarPorRfc(rfcCurp);
+        if (!clienteEncontrado.isPresent()) {
+            throw new ClienteNoEncontradoException(
+                "No se encontró ningún cliente con RFC/CURP: " + rfcCurp);
+        }
+        if (clienteEncontrado.get().tieneCuentasActivas()) {
             throw new IllegalStateException(
                 "El cliente tiene cuentas activas y no puede ser eliminado.");
         }
-        clientes.remove(cliente);
+        repositorioCliente.eliminar(rfcCurp);
     }
 
     public List<Cliente> buscarPorCriterio(String filtro) {
-        if (filtro == null || filtro.isEmpty()) return obtenerTodosLosClientes();
-        String f = filtro.toLowerCase();
-        return clientes.stream()
-            .filter(c -> c.getRfcCurp().toLowerCase().contains(f)
-                      || c.getNombre().toLowerCase().contains(f)
-                      || c.getApellidos().toLowerCase().contains(f))
-            .collect(Collectors.toList());
+        return repositorioCliente.buscarPorCriterio(filtro);
     }
 
     private void solicitarAgregarCliente() {
@@ -167,19 +159,5 @@ public class ControladorCliente {
                 vista.obtenerEscena().getWindow());
             propietarioDialogoEstablecido = true;
         }
-    }
-
-    private Cliente buscarClientePorRfc(String rfcCurp)
-            throws ClienteNoEncontradoException {
-        return clientes.stream()
-            .filter(c -> c.getRfcCurp().equalsIgnoreCase(rfcCurp))
-            .findFirst()
-            .orElseThrow(() -> new ClienteNoEncontradoException(
-                "No se encontró ningún cliente con RFC/CURP: " + rfcCurp));
-    }
-
-    private boolean existeCliente(String rfcCurp) {
-        return clientes.stream()
-            .anyMatch(c -> c.getRfcCurp().equalsIgnoreCase(rfcCurp));
     }
 }

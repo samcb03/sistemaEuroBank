@@ -3,8 +3,8 @@ package uv.lis.controlador;
 import java.util.ArrayList;
 import javafx.stage.Stage;
 import uv.lis.modelo.CuentaBancaria;
-import uv.lis.modelo.RepositorioEmpleados;
-import uv.lis.modelo.RepositorioSucursales;
+import uv.lis.modelo.SucursalDAO;
+import uv.lis.modelo.DAO.implementacion.EmpleadoDAO;
 import uv.lis.modelo.Rol;
 import uv.lis.vista.VistaCliente;
 import uv.lis.vista.VistaCuenta;
@@ -24,14 +24,14 @@ public class ControladorMenuPrincipal {
     private static final String TITULO_LOGIN        = "EuroBank - Acceso al Sistema";
 
     private final VistaMenuPrincipal   vistaMenuPrincipal;
-    private final RepositorioEmpleados repositorioEmpleados;
-    private final RepositorioSucursales repositorioSucursales;
+    private final EmpleadoDAO repositorioEmpleados;
+    private final SucursalDAO repositorioSucursales;
     private final Stage                escenarioPrincipal;
     private final VistaLogin           vistaLogin;
 
     public ControladorMenuPrincipal(VistaMenuPrincipal vistaMenuPrincipal,
-                                    RepositorioEmpleados repositorioEmpleados,
-                                    RepositorioSucursales repositorioSucursales,
+                                    EmpleadoDAO repositorioEmpleados,
+                                    SucursalDAO repositorioSucursales,
                                     Stage escenarioPrincipal,
                                     VistaLogin vistaLogin) {
         this.vistaMenuPrincipal    = vistaMenuPrincipal;
@@ -77,8 +77,6 @@ public class ControladorMenuPrincipal {
         mostrarVentanaSecundaria(TITULO_SUCURSALES, vistaSucursales.obtenerEscena());
     }
 
-    // CORRECCIÓN: se crea el ControladorCliente y se llama iniciar()
-    // para que los botones Agregar / Editar / Eliminar funcionen.
     private void abrirClientes() {
         VistaCliente vistaCliente = new VistaCliente();
         ControladorCliente controladorCliente = new ControladorCliente();
@@ -86,8 +84,6 @@ public class ControladorMenuPrincipal {
         mostrarVentanaSecundaria(TITULO_CLIENTES, vistaCliente.obtenerEscena());
     }
 
-    // CORRECCIÓN: se crea el CuentaControlador y se llama iniciar()
-    // para que los botones Abrir / Cerrar Cuenta funcionen.
     private void abrirCuentas() {
         VistaCuenta vistaCuenta = new VistaCuenta();
         CuentaControlador controladorCuenta = new CuentaControlador();

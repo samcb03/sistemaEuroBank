@@ -16,4 +16,3 @@ public class ManejadorAgregarEmpleado implements EventHandler<ActionEvent> {
         controladorEmpleados.solicitarAgregarEmpleado();
     }
 }
-

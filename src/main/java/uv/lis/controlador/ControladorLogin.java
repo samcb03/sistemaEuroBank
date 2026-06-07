@@ -2,8 +2,8 @@ package uv.lis.controlador;
 
 import javafx.stage.Stage;
 import uv.lis.modelo.Empleado;
-import uv.lis.modelo.RepositorioEmpleados;
-import uv.lis.modelo.RepositorioSucursales;
+import uv.lis.modelo.SucursalDAO;
+import uv.lis.modelo.DAO.implementacion.EmpleadoDAO;
 import uv.lis.modelo.ResultadoAutenticacion;
 import uv.lis.modelo.ServicioAutenticacion;
 import uv.lis.vista.VistaLogin;
@@ -15,16 +15,16 @@ public class ControladorLogin {
 
     private final VistaLogin vistaLogin;
     private final ServicioAutenticacion servicioAutenticacion;
-    private final RepositorioEmpleados repositorioEmpleados;
-    private final RepositorioSucursales repositorioSucursales;
+    private final EmpleadoDAO repositorioEmpleados;
+    private final SucursalDAO repositorioSucursales;
 
     public ControladorLogin(VistaLogin vistaLogin,
                             ServicioAutenticacion servicioAutenticacion,
-                            RepositorioEmpleados repositorioEmpleados) {
+                            EmpleadoDAO repositorioEmpleados) {
         this.vistaLogin = vistaLogin;
         this.servicioAutenticacion = servicioAutenticacion;
         this.repositorioEmpleados = repositorioEmpleados;
-        this.repositorioSucursales = new RepositorioSucursales();
+        this.repositorioSucursales = new SucursalDAO();
     }
 
     public void iniciar() {
