@@ -8,17 +8,17 @@ public class DatosFormularioEmpleado {
     private final String nombreCompleto;
     private final String direccion;
     private final LocalDate fechaNacimiento;
-    private final Genero genero;
+    private final String genero;
     private final String salarioTexto;
     private final String nombreUsuario;
     private final String contrasenia;
-    private final Rol rol;
+    private final String rol;
     private final String horaInicioTurnoTexto;
     private final String horaFinTurnoTexto;
     private final String numeroVentanillaTexto;
     private final String numeroClientesTexto;
-    private final EspecializacionEjecutivo especializacion;
-    private final NivelAccesoGerente nivelAcceso;
+    private final String especializacion;
+    private final String nivelAcceso;
     private final String aniosExperienciaTexto;
 
     private DatosFormularioEmpleado(Constructor constructor) {
@@ -56,7 +56,7 @@ public class DatosFormularioEmpleado {
         return fechaNacimiento;
     }
 
-    public Genero getGenero() {
+    public String getGenero() {
         return genero;
     }
 
@@ -72,7 +72,7 @@ public class DatosFormularioEmpleado {
         return contrasenia;
     }
 
-    public Rol getRol() {
+    public String getRol() {
         return rol;
     }
 
@@ -92,11 +92,11 @@ public class DatosFormularioEmpleado {
         return numeroClientesTexto;
     }
 
-    public EspecializacionEjecutivo getEspecializacion() {
+    public String getEspecializacion() {
         return especializacion;
     }
 
-    public NivelAccesoGerente getNivelAcceso() {
+    public String getNivelAcceso() {
         return nivelAcceso;
     }
 
@@ -110,17 +110,17 @@ public class DatosFormularioEmpleado {
         private String nombreCompleto;
         private String direccion;
         private LocalDate fechaNacimiento;
-        private Genero genero;
+        private String genero;
         private String salarioTexto;
         private String nombreUsuario;
         private String contrasenia;
-        private Rol rol;
+        private String rol;
         private String horaInicioTurnoTexto;
         private String horaFinTurnoTexto;
         private String numeroVentanillaTexto;
         private String numeroClientesTexto;
-        private EspecializacionEjecutivo especializacion;
-        private NivelAccesoGerente nivelAcceso;
+        private String especializacion;
+        private String nivelAcceso;
         private String aniosExperienciaTexto;
 
         public Constructor conIdEmpleado(String idEmpleado) {
@@ -143,7 +143,7 @@ public class DatosFormularioEmpleado {
             return this;
         }
 
-        public Constructor conGenero(Genero genero) {
+        public Constructor conGenero(String genero) {
             this.genero = genero;
             return this;
         }
@@ -163,7 +163,7 @@ public class DatosFormularioEmpleado {
             return this;
         }
 
-        public Constructor conRol(Rol rol) {
+        public Constructor conRol(String rol) {
             this.rol = rol;
             return this;
         }
@@ -188,12 +188,12 @@ public class DatosFormularioEmpleado {
             return this;
         }
 
-        public Constructor conEspecializacion(EspecializacionEjecutivo especializacion) {
+        public Constructor conEspecializacion(String especializacion) {
             this.especializacion = especializacion;
             return this;
         }
 
-        public Constructor conNivelAcceso(NivelAccesoGerente nivelAcceso) {
+        public Constructor conNivelAcceso(String nivelAcceso) {
             this.nivelAcceso = nivelAcceso;
             return this;
         }

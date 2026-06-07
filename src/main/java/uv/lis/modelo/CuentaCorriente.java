@@ -27,8 +27,8 @@ public class CuentaCorriente extends CuentaBancaria {
     }
 
     @Override
-    public TipoCuenta obtenerTipoCuenta() {
-        return TipoCuenta.CORRIENTE;
+    public String obtenerTipoCuenta() {
+        return CatalogoTipoCuenta.CORRIENTE;
     }
 
     public double getLimiteCredito() {

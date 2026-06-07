@@ -2,10 +2,10 @@ package uv.lis.controlador;
 
 import java.util.ArrayList;
 import javafx.stage.Stage;
+import uv.lis.modelo.CatalogoRol;
 import uv.lis.modelo.CuentaBancaria;
 import uv.lis.modelo.SucursalDAO;
 import uv.lis.modelo.DAO.implementacion.EmpleadoDAO;
-import uv.lis.modelo.Rol;
 import uv.lis.vista.VistaCliente;
 import uv.lis.vista.VistaCuenta;
 import uv.lis.vista.VistaEmpleados;
@@ -16,18 +16,18 @@ import uv.lis.vista.VistaTransaccion;
 
 public class ControladorMenuPrincipal {
 
-    private static final String TITULO_EMPLEADOS    = "EuroBank - Administracion de Empleados";
-    private static final String TITULO_SUCURSALES   = "EuroBank - Administracion de Sucursales";
-    private static final String TITULO_CLIENTES     = "EuroBank - Clientes";
-    private static final String TITULO_CUENTAS      = "EuroBank - Cuentas Bancarias";
+    private static final String TITULO_EMPLEADOS     = "EuroBank - Administracion de Empleados";
+    private static final String TITULO_SUCURSALES    = "EuroBank - Administracion de Sucursales";
+    private static final String TITULO_CLIENTES      = "EuroBank - Clientes";
+    private static final String TITULO_CUENTAS       = "EuroBank - Cuentas Bancarias";
     private static final String TITULO_TRANSACCIONES = "EuroBank - Transacciones";
-    private static final String TITULO_LOGIN        = "EuroBank - Acceso al Sistema";
+    private static final String TITULO_LOGIN         = "EuroBank - Acceso al Sistema";
 
-    private final VistaMenuPrincipal   vistaMenuPrincipal;
-    private final EmpleadoDAO repositorioEmpleados;
-    private final SucursalDAO repositorioSucursales;
-    private final Stage                escenarioPrincipal;
-    private final VistaLogin           vistaLogin;
+    private final VistaMenuPrincipal vistaMenuPrincipal;
+    private final EmpleadoDAO        repositorioEmpleados;
+    private final SucursalDAO        repositorioSucursales;
+    private final Stage              escenarioPrincipal;
+    private final VistaLogin         vistaLogin;
 
     public ControladorMenuPrincipal(VistaMenuPrincipal vistaMenuPrincipal,
                                     EmpleadoDAO repositorioEmpleados,
@@ -41,14 +41,15 @@ public class ControladorMenuPrincipal {
         this.vistaLogin            = vistaLogin;
     }
 
-    public void iniciar(Rol rolAutenticado) {
+    public void iniciar(String rolAutenticado) {
         configurarPermisos(rolAutenticado);
         registrarManejadores();
     }
 
-    private void configurarPermisos(Rol rolAutenticado) {
+    private void configurarPermisos(String rolAutenticado) {
         boolean puedeAdministrar =
-            rolAutenticado == Rol.ADMINISTRADOR || rolAutenticado == Rol.GERENTE;
+            CatalogoRol.ADMINISTRADOR.equals(rolAutenticado) ||
+            CatalogoRol.GERENTE.equals(rolAutenticado);
         vistaMenuPrincipal.obtenerBotonEmpleados().setDisable(!puedeAdministrar);
     }
 

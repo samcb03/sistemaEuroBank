@@ -9,23 +9,19 @@ import uv.lis.modelo.CuentaAhorros;
 import uv.lis.modelo.CuentaBancaria;
 import uv.lis.modelo.CuentaCorriente;
 import uv.lis.modelo.CuentaEmpresarial;
-import uv.lis.modelo.TipoCuenta;
+import uv.lis.modelo.CatalogoTipoCuenta;
 
 public class MapeadorCuenta {
 
     public CuentaBancaria mapearDesdeFila(ResultSet fila) throws SQLException {
-        TipoCuenta tipo = TipoCuenta.valueOf(fila.getString("tipo"));
+        String tipo = fila.getString("tipo");
         CuentaBancaria cuenta;
-        switch (tipo) {
-            case AHORROS:
-                cuenta = construirAhorros(fila);
-                break;
-            case CORRIENTE:
-                cuenta = construirCorriente(fila);
-                break;
-            default:
-                cuenta = construirEmpresarial(fila);
-                break;
+        if (CatalogoTipoCuenta.AHORROS.equals(tipo)) {
+            cuenta = construirAhorros(fila);
+        } else if (CatalogoTipoCuenta.CORRIENTE.equals(tipo)) {
+            cuenta = construirCorriente(fila);
+        } else {
+            cuenta = construirEmpresarial(fila);
         }
         return cuenta;
     }
@@ -45,7 +41,7 @@ public class MapeadorCuenta {
     private int asignarColumnasModificables(PreparedStatement sentencia, CuentaBancaria cuenta, int inicio)
             throws SQLException {
         int indice = inicio;
-        sentencia.setString(indice++, cuenta.obtenerTipoCuenta().name());
+        sentencia.setString(indice++, cuenta.obtenerTipoCuenta());
         sentencia.setDouble(indice++, cuenta.getSaldo());
         asignarRfcCliente(sentencia, cuenta, indice++);
         asignarIdSucursal(sentencia, cuenta, indice++);
@@ -55,16 +51,13 @@ public class MapeadorCuenta {
 
     private int asignarColumnasEspecificas(PreparedStatement sentencia, CuentaBancaria cuenta, int inicio)
             throws SQLException {
-        switch (cuenta.obtenerTipoCuenta()) {
-            case AHORROS:
-                asignarEspecificasAhorros(sentencia, (CuentaAhorros) cuenta, inicio);
-                break;
-            case CORRIENTE:
-                asignarEspecificasCorriente(sentencia, (CuentaCorriente) cuenta, inicio);
-                break;
-            default:
-                asignarEspecificasEmpresarial(sentencia, (CuentaEmpresarial) cuenta, inicio);
-                break;
+        String tipo = cuenta.obtenerTipoCuenta();
+        if (CatalogoTipoCuenta.AHORROS.equals(tipo)) {
+            asignarEspecificasAhorros(sentencia, (CuentaAhorros) cuenta, inicio);
+        } else if (CatalogoTipoCuenta.CORRIENTE.equals(tipo)) {
+            asignarEspecificasCorriente(sentencia, (CuentaCorriente) cuenta, inicio);
+        } else {
+            asignarEspecificasEmpresarial(sentencia, (CuentaEmpresarial) cuenta, inicio);
         }
         int indiceSiguiente = inicio + 3;
         return indiceSiguiente;

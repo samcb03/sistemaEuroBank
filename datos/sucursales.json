@@ -1,0 +1,20 @@
+[
+  {
+    "numeroIdentificacion": "SUC-001",
+    "nombre": "Sucursal Central",
+    "direccion": "Av. Europa 100",
+    "telefono": "2281000001",
+    "correo": "central@eurobank.com",
+    "nombreGerente": "Maria Lopez",
+    "personaContacto": "Carlos Rivera"
+  },
+  {
+    "numeroIdentificacion": "SUC-002",
+    "nombre": "Sucursal Norte",
+    "direccion": "Calle Norte 45",
+    "telefono": "2281000002",
+    "correo": "norte@eurobank.com",
+    "nombreGerente": "Roberto Sanchez",
+    "personaContacto": "Laura Diaz"
+  }
+]
