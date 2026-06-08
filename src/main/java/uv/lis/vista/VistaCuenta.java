@@ -32,7 +32,6 @@ public class VistaCuenta {
     private static final double ANCHO_COLUMNA_SALDO   = 110;
     private static final double ANCHO_COLUMNA_LIMITE  = 110;
     private static final double ANCHO_COLUMNA_CLIENTE = 160;
-    private static final double ANCHO_COLUMNA_ACTIVA  = 80;
 
     private final TableView<CuentaBancaria> tablaCuentas;
     private final ObservableList<CuentaBancaria> cuentasObservables;
@@ -93,8 +92,6 @@ public class VistaCuenta {
             crearColumna("Límite Crédito", "limiteCredito", ANCHO_COLUMNA_LIMITE));
         tabla.getColumns().add(
             crearColumna("Cliente", "rfcCurpCliente", ANCHO_COLUMNA_CLIENTE));
-        tabla.getColumns().add(
-            crearColumna("Activa", "activa", ANCHO_COLUMNA_ACTIVA));
         return tabla;
     }
 

@@ -22,11 +22,24 @@ public abstract class CuentaBancaria {
 
     public abstract double getFondosDisponibles();
 
-    /**
-     * Devuelve el subtipo concreto de la cuenta. Sustituye a las
-     * comprobaciones instanceof en la capa de persistencia.
-     */
     public abstract String obtenerTipoCuenta();
+
+    public String getTipoCuenta() {
+        String tipo = obtenerTipoCuenta();
+        return tipo;
+    }
+
+    public double getLimiteCredito() {
+        return 0.0;
+    }
+
+    public String getRfcCurpCliente() {
+        String rfcCurp = "";
+        if (cliente != null) {
+            rfcCurp = cliente.getRfcCurp();
+        }
+        return rfcCurp;
+    }
 
     public String getNumeroCuenta() {
         return numeroCuenta;

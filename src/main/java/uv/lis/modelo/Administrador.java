@@ -27,4 +27,16 @@ public class Administrador extends Empleado {
     public String obtenerRol() {
         return CatalogoRol.ADMINISTRADOR;
     }
+
+    @Override
+    public PermisosEmpleado obtenerPermisos() {
+        PermisosEmpleado permisos = PermisosEmpleado.constructor()
+                .permitirAdministrarEmpleados()
+                .permitirGestionarSucursales()
+                .permitirGestionarCuentas()
+                .permitirRegistrarTransacciones()
+                .permitirGestionarClientes()
+                .construir();
+        return permisos;
+    }
 }

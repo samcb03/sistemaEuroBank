@@ -31,6 +31,7 @@ public class CuentaEmpresarial extends CuentaBancaria {
         return CatalogoTipoCuenta.EMPRESARIAL;
     }
 
+    @Override
     public double getLimiteCredito() {
         return limiteCredito;
     }
