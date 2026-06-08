@@ -1,10 +1,12 @@
 package uv.lis.vista;
 
+import java.util.List;
 import java.util.Optional;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -19,7 +21,7 @@ public class DialogoSucursal {
     private final TextField campoDireccion;
     private final TextField campoTelefono;
     private final TextField campoCorreo;
-    private final TextField campoNombreGerente;
+    private final ComboBox<String> selectorGerente;
     private final TextField campoPersonaContacto;
     private final ButtonType tipoBotonGuardar;
     private final Dialog<ButtonType> dialogo;
@@ -30,10 +32,17 @@ public class DialogoSucursal {
         this.campoDireccion = new TextField();
         this.campoTelefono = new TextField();
         this.campoCorreo = new TextField();
-        this.campoNombreGerente = new TextField();
+        this.selectorGerente = crearSelectorGerente();
         this.campoPersonaContacto = new TextField();
         this.tipoBotonGuardar = new ButtonType("Guardar", ButtonData.OK_DONE);
         this.dialogo = construirDialogo();
+    }
+
+    private ComboBox<String> crearSelectorGerente() {
+        ComboBox<String> selector = new ComboBox<String>();
+        selector.setEditable(true);
+        selector.setMaxWidth(Double.MAX_VALUE);
+        return selector;
     }
 
     private Dialog<ButtonType> construirDialogo() {
@@ -54,7 +63,7 @@ public class DialogoSucursal {
         agregarFila(formulario, 2, "Direccion:", campoDireccion);
         agregarFila(formulario, 3, "Telefono:", campoTelefono);
         agregarFila(formulario, 4, "Correo:", campoCorreo);
-        agregarFila(formulario, 5, "Nombre del gerente:", campoNombreGerente);
+        agregarFila(formulario, 5, "Nombre del gerente:", selectorGerente);
         agregarFila(formulario, 6, "Persona de contacto:", campoPersonaContacto);
         return formulario;
     }
@@ -81,7 +90,7 @@ public class DialogoSucursal {
         campoDireccion.setText(sucursal.getDireccion());
         campoTelefono.setText(sucursal.getTelefono());
         campoCorreo.setText(sucursal.getCorreo());
-        campoNombreGerente.setText(sucursal.getNombreGerente());
+        selectorGerente.setValue(sucursal.getNombreGerente());
         campoPersonaContacto.setText(sucursal.getPersonaContacto());
         campoNumeroIdentificacion.setDisable(true);
     }
@@ -98,8 +107,22 @@ public class DialogoSucursal {
                 campoDireccion.getText().trim(),
                 campoTelefono.getText().trim(),
                 campoCorreo.getText().trim(),
-                campoNombreGerente.getText().trim(),
+                gerenteSeleccionado(),
                 campoPersonaContacto.getText().trim());
+    }
+
+    public void cargarGerentes(List<String> nombresGerentes) {
+        String seleccionActual = selectorGerente.getValue();
+        selectorGerente.getItems().setAll(nombresGerentes);
+        selectorGerente.setValue(seleccionActual);
+    }
+
+    private String gerenteSeleccionado() {
+        String valor = selectorGerente.getValue();
+        if (valor == null) {
+            valor = "";
+        }
+        return valor.trim();
     }
 
     private void limpiarCampos() {
@@ -108,7 +131,7 @@ public class DialogoSucursal {
         campoDireccion.clear();
         campoTelefono.clear();
         campoCorreo.clear();
-        campoNombreGerente.clear();
+        selectorGerente.setValue(null);
         campoPersonaContacto.clear();
     }
 }

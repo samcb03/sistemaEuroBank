@@ -3,10 +3,6 @@ package uv.lis.modelo;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Valores validos para el tipo de cuenta bancaria. Sustituye al antiguo
- * enum TipoCuenta.
- */
 public final class CatalogoTipoCuenta {
 
     public static final String AHORROS = "AHORROS";

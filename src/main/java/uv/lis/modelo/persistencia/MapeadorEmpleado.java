@@ -15,11 +15,6 @@ import uv.lis.modelo.Empleado;
 import uv.lis.modelo.CatalogoRol;
 import uv.lis.modelo.Gerente;
 
-/**
- * Traduce entre filas de la tabla "empleado" y la jerarquia Empleado.
- * El despacho por subtipo se realiza con un switch sobre el rol
- * (lectura) o sobre obtenerRol() (escritura), evitando instanceof.
- */
 public class MapeadorEmpleado {
 
     public Empleado mapearDesdeFila(ResultSet fila) throws SQLException {

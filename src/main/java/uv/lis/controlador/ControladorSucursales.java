@@ -1,6 +1,11 @@
 package uv.lis.controlador;
 
+import java.util.ArrayList;
+import java.util.List;
+import uv.lis.modelo.CatalogoRol;
+import uv.lis.modelo.Empleado;
 import uv.lis.modelo.SucursalDAO;
+import uv.lis.modelo.DAO.implementacion.EmpleadoDAO;
 import uv.lis.modelo.Sucursal;
 import uv.lis.modelo.excepcion.PersistenciaSucursalException;
 import uv.lis.modelo.excepcion.SucursalDuplicadaException;
@@ -12,6 +17,7 @@ public class ControladorSucursales {
 
     private final VistaSucursales vistaSucursales;
     private final SucursalDAO repositorioSucursales;
+    private final EmpleadoDAO repositorioEmpleados;
     private final DialogoSucursal dialogoSucursal;
     private boolean propietarioDialogoEstablecido;
 
@@ -19,6 +25,7 @@ public class ControladorSucursales {
                                  SucursalDAO repositorioSucursales) {
         this.vistaSucursales = vistaSucursales;
         this.repositorioSucursales = repositorioSucursales;
+        this.repositorioEmpleados = new EmpleadoDAO();
         this.dialogoSucursal = new DialogoSucursal();
         this.propietarioDialogoEstablecido = false;
     }
@@ -35,6 +42,7 @@ public class ControladorSucursales {
     }
 
     private void solicitarAgregarSucursal() {
+        cargarGerentesEnDialogo();
         dialogoSucursal.prepararParaAgregar();
         procesarCaptura(true);
     }
@@ -44,6 +52,7 @@ public class ControladorSucursales {
         if (sucursalSeleccionada == null) {
             vistaSucursales.mostrarMensajeError("Seleccione una sucursal para editar.");
         } else {
+            cargarGerentesEnDialogo();
             dialogoSucursal.prepararParaEditar(sucursalSeleccionada);
             procesarCaptura(false);
         }
@@ -56,6 +65,16 @@ public class ControladorSucursales {
         } else {
             confirmarYEliminar(sucursalSeleccionada);
         }
+    }
+
+    private void cargarGerentesEnDialogo() {
+        List<String> nombresGerentes = new ArrayList<String>();
+        for (Empleado empleado : repositorioEmpleados.obtenerTodos()) {
+            if (CatalogoRol.GERENTE.equals(empleado.obtenerRol())) {
+                nombresGerentes.add(empleado.getNombreCompleto());
+            }
+        }
+        dialogoSucursal.cargarGerentes(nombresGerentes);
     }
 
     private void procesarCaptura(boolean esAlta) {

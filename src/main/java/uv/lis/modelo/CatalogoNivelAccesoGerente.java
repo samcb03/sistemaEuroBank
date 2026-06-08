@@ -3,10 +3,6 @@ package uv.lis.modelo;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Valores validos para el nivel de acceso de un gerente. Sustituye al
- * antiguo enum NivelAccesoGerente.
- */
 public final class CatalogoNivelAccesoGerente {
 
     public static final String SUCURSAL = "SUCURSAL";
