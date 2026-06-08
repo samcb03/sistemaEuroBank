@@ -59,12 +59,16 @@ public class VistaCliente {
     private Scene construirEscena() {
         Label titulo = new Label("Administración de Clientes");
         titulo.setFont(Font.font("System", FontWeight.BOLD, 18));
+        titulo.setStyle(EstilosVista.TITULO);
+        tablaClientes.setStyle(EstilosVista.TABLA);
+        labelResultadoSaldo.setStyle(EstilosVista.SUBTITULO);
 
         HBox barraBusqueda = construirBarraBusqueda();
         VBox.setVgrow(tablaClientes, Priority.ALWAYS);
 
         VBox contenedor = new VBox(12);
         contenedor.setPadding(new Insets(20));
+        contenedor.setStyle(EstilosVista.FONDO_VENTANA);
         contenedor.getChildren().addAll(
             titulo,
             barraBusqueda,
@@ -78,6 +82,8 @@ public class VistaCliente {
     private HBox construirBarraBusqueda() {
         campoBusqueda.setPromptText("Buscar por RFC/CURP...");
         campoBusqueda.setPrefWidth(250);
+        campoBusqueda.setStyle(EstilosVista.CAMPO);
+        botonConsultarSaldo.setStyle(EstilosVista.BOTON_PRIMARIO);
         HBox barra = new HBox(10, new Label("Buscar:"), campoBusqueda, botonConsultarSaldo);
         barra.setAlignment(Pos.CENTER_LEFT);
         return barra;
@@ -86,6 +92,9 @@ public class VistaCliente {
     private HBox construirBarraBotones() {
         HBox barra = new HBox(10);
         barra.setAlignment(Pos.CENTER_RIGHT);
+        botonAgregar.setStyle(EstilosVista.BOTON_EXITO);
+        botonEditar.setStyle(EstilosVista.BOTON_PRIMARIO);
+        botonEliminar.setStyle(EstilosVista.BOTON_PELIGRO);
         barra.getChildren().addAll(botonAgregar, botonEditar, botonEliminar);
         return barra;
     }

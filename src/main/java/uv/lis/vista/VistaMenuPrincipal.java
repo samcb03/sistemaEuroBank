@@ -41,17 +41,21 @@ public class VistaMenuPrincipal {
     private Scene construirEscena() {
         Label etiquetaTitulo = new Label("Menu Principal EuroBank");
         etiquetaTitulo.setFont(Font.font("System", FontWeight.BOLD, 20));
+        etiquetaTitulo.setStyle(EstilosVista.TITULO);
 
         Label etiquetaUsuario = new Label("Usuario: " + empleadoAutenticado.getNombreCompleto()
                 + " | Rol: " + CatalogoRol.nombreVisible(empleadoAutenticado.obtenerRol()));
+        etiquetaUsuario.setStyle(EstilosVista.SUBTITULO);
 
         GridPane panelModulos = construirPanelModulos();
 
+        botonCerrarSesion.setStyle(EstilosVista.BOTON_SECUNDARIO);
         HBox barraSesion = new HBox(botonCerrarSesion);
         barraSesion.setAlignment(Pos.CENTER_RIGHT);
 
         VBox contenedorPrincipal = new VBox(18);
         contenedorPrincipal.setPadding(new Insets(25));
+        contenedorPrincipal.setStyle(EstilosVista.FONDO_VENTANA);
         contenedorPrincipal.getChildren().addAll(etiquetaTitulo, etiquetaUsuario, panelModulos, barraSesion);
 
         return new Scene(contenedorPrincipal, ANCHO_ESCENA, ALTO_ESCENA);
@@ -79,6 +83,7 @@ public class VistaMenuPrincipal {
     private void configurarBotonModulo(Button boton) {
         boton.setMinWidth(200);
         boton.setMinHeight(55);
+        boton.setStyle(EstilosVista.BOTON_PRIMARIO);
     }
 
     public Scene obtenerEscena() {
