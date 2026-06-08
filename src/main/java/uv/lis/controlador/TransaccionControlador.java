@@ -3,10 +3,13 @@ package uv.lis.controlador;
 import uv.lis.modelo.excepcion.SaldoInsuficienteException;
 import uv.lis.modelo.excepcion.TransaccionFallidaException;
 import uv.lis.modelo.CuentaBancaria;
+import uv.lis.modelo.Sucursal;
+import uv.lis.modelo.SucursalDAO;
 import uv.lis.modelo.Transaccion;
 import uv.lis.modelo.DAO.implementacion.CuentaDAO;
 import uv.lis.modelo.DAO.implementacion.EmpleadoDAO;
 import uv.lis.modelo.DAO.implementacion.TransaccionDAO;
+import uv.lis.vista.VistaTransaccion;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -20,11 +23,14 @@ public class TransaccionControlador {
     private final EmpleadoDAO repositorioEmpleados;
     private final CuentaDAO repositorioCuenta;
     private final TransaccionDAO repositorioTransaccion;
+    private final SucursalDAO repositorioSucursales;
+    private VistaTransaccion vista;
 
     public TransaccionControlador() {
         this.repositorioEmpleados = new EmpleadoDAO();
         this.repositorioCuenta = new CuentaDAO();
         this.repositorioTransaccion = new TransaccionDAO();
+        this.repositorioSucursales = new SucursalDAO();
     }
 
     public TransaccionControlador(List<CuentaBancaria> cuentasIgnoradas) {
@@ -37,6 +43,72 @@ public class TransaccionControlador {
         tipos.add(Transaccion.RETIRO);
         tipos.add(Transaccion.TRANSFERENCIA);
         return tipos;
+    }
+
+    public void iniciar(VistaTransaccion vista) {
+        this.vista = vista;
+        cargarOpciones();
+        refrescarVista();
+        vista.obtenerBotonEjecutar().setOnAction(e -> ejecutarTransaccion());
+        vista.obtenerBotonLimpiar().setOnAction(e -> vista.limpiarFormulario());
+    }
+
+    private void cargarOpciones() {
+        List<String> numerosCuenta = new java.util.ArrayList<String>();
+        for (CuentaBancaria cuenta : repositorioCuenta.obtenerTodas()) {
+            numerosCuenta.add(cuenta.getNumeroCuenta());
+        }
+        List<String> idsSucursal = new java.util.ArrayList<String>();
+        for (Sucursal sucursal : repositorioSucursales.obtenerTodas()) {
+            idsSucursal.add(sucursal.getNumeroIdentificacion());
+        }
+        vista.cargarCuentas(numerosCuenta);
+        vista.cargarSucursales(idsSucursal);
+    }
+
+    private void refrescarVista() {
+        vista.refrescarTabla(repositorioTransaccion.obtenerTodas());
+    }
+
+    private void ejecutarTransaccion() {
+        String tipo = vista.obtenerTipoSeleccionado();
+        if (tipo.isEmpty()) {
+            vista.mostrarMensajeError("Seleccione el tipo de transacción.");
+        } else {
+            intentarEjecutar(tipo);
+        }
+    }
+
+    private void intentarEjecutar(String tipo) {
+        try {
+            double monto = Double.parseDouble(vista.obtenerMonto());
+            Transaccion transaccion = despacharTransaccion(tipo, monto);
+            vista.mostrarMensajeInformacion(
+                "Transacción registrada correctamente (" + transaccion.getTipo() + ").");
+            vista.limpiarFormulario();
+            cargarOpciones();
+            refrescarVista();
+        } catch (NumberFormatException ex) {
+            vista.mostrarMensajeError("El monto debe ser un número válido.");
+        } catch (TransaccionFallidaException | SaldoInsuficienteException ex) {
+            vista.mostrarMensajeError(ex.getMessage());
+        }
+    }
+
+    private Transaccion despacharTransaccion(String tipo, double monto) 
+        throws TransaccionFallidaException, SaldoInsuficienteException {
+        Transaccion transaccion;
+        String origen = vista.obtenerCuentaOrigen();
+        String destino = vista.obtenerCuentaDestino();
+        String sucursal = vista.obtenerSucursal();
+        if (Transaccion.DEPOSITO.equals(tipo)) {
+            transaccion = registrarDeposito(origen, monto, sucursal);
+        } else if (Transaccion.RETIRO.equals(tipo)) {
+            transaccion = registrarRetiro(origen, monto, sucursal);
+        } else {
+            transaccion = registrarTransferencia(origen, destino, monto, sucursal);
+        }
+        return transaccion;
     }
 
     public Transaccion registrarDeposito(String numeroCuenta, double monto, String idSucursal)

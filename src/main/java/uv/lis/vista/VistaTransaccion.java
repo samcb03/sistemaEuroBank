@@ -26,22 +26,22 @@ import java.util.List;
 
 public class VistaTransaccion {
 
-    private static final double ANCHO_ESCENA         = 900;
-    private static final double ALTO_ESCENA          = 560;
-    private static final double ANCHO_COLUMNA_TIPO   = 120;
-    private static final double ANCHO_COLUMNA_MONTO  = 110;
-    private static final double ANCHO_COLUMNA_FECHA  = 160;
-    private static final double ANCHO_COLUMNA_ORIGEN = 140;
+    private static final double ANCHO_ESCENA          = 900;
+    private static final double ALTO_ESCENA           = 560;
+    private static final double ANCHO_COLUMNA_TIPO    = 120;
+    private static final double ANCHO_COLUMNA_MONTO   = 110;
+    private static final double ANCHO_COLUMNA_FECHA   = 160;
+    private static final double ANCHO_COLUMNA_ORIGEN  = 140;
     private static final double ANCHO_COLUMNA_DESTINO = 140;
 
     private final TableView<Transaccion> tablaTransacciones;
     private final ObservableList<Transaccion> transaccionesObservables;
 
     private final ComboBox<String> comboTipoTransaccion;
-    private final TextField campoCuentaOrigen;
-    private final TextField campoCuentaDestino;
+    private final ComboBox<String> comboCuentaOrigen;
+    private final ComboBox<String> comboCuentaDestino;
     private final TextField campoMonto;
-    private final TextField campoSucursal;
+    private final ComboBox<String> comboSucursal;
 
     private final Button botonEjecutar;
     private final Button botonLimpiar;
@@ -56,10 +56,10 @@ public class VistaTransaccion {
                 Transaccion.DEPOSITO,
                 Transaccion.RETIRO,
                 Transaccion.TRANSFERENCIA));
-        this.campoCuentaOrigen  = new TextField();
-        this.campoCuentaDestino = new TextField();
+        this.comboCuentaOrigen  = new ComboBox<>();
+        this.comboCuentaDestino = new ComboBox<>();
         this.campoMonto         = new TextField();
-        this.campoSucursal      = new TextField();
+        this.comboSucursal      = new ComboBox<>();
         this.botonEjecutar      = new Button("Ejecutar");
         this.botonLimpiar       = new Button("Limpiar");
         this.escena             = construirEscena();
@@ -84,26 +84,26 @@ public class VistaTransaccion {
     }
 
     private GridPane construirFormulario() {
-        campoCuentaOrigen.setPromptText("Número de cuenta origen");
-        campoCuentaDestino.setPromptText("Número de cuenta destino");
-        campoMonto.setPromptText("Monto");
-        campoSucursal.setPromptText("ID Sucursal");
         comboTipoTransaccion.setPromptText("Tipo de transacción");
+        comboCuentaOrigen.setPromptText("Cuenta origen");
+        comboCuentaDestino.setPromptText("Cuenta destino");
+        campoMonto.setPromptText("Monto");
+        comboSucursal.setPromptText("Sucursal");
 
         GridPane grid = new GridPane();
         grid.setHgap(10);
         grid.setVgap(8);
 
-        grid.add(new Label("Tipo:"),            0, 0);
+        grid.add(new Label("Tipo:"),           0, 0);
         grid.add(comboTipoTransaccion,          1, 0);
         grid.add(new Label("Cuenta Origen:"),   0, 1);
-        grid.add(campoCuentaOrigen,             1, 1);
+        grid.add(comboCuentaOrigen,             1, 1);
         grid.add(new Label("Cuenta Destino:"),  0, 2);
-        grid.add(campoCuentaDestino,            1, 2);
+        grid.add(comboCuentaDestino,            1, 2);
         grid.add(new Label("Monto:"),           0, 3);
         grid.add(campoMonto,                    1, 3);
         grid.add(new Label("Sucursal:"),        0, 4);
-        grid.add(campoSucursal,                 1, 4);
+        grid.add(comboSucursal,                 1, 4);
 
         return grid;
     }
@@ -142,12 +142,21 @@ public class VistaTransaccion {
         transaccionesObservables.setAll(transacciones);
     }
 
+    public void cargarCuentas(List<String> numerosCuenta) {
+        comboCuentaOrigen.getItems().setAll(numerosCuenta);
+        comboCuentaDestino.getItems().setAll(numerosCuenta);
+    }
+
+    public void cargarSucursales(List<String> idsSucursal) {
+        comboSucursal.getItems().setAll(idsSucursal);
+    }
+
     public void limpiarFormulario() {
         comboTipoTransaccion.setValue(null);
-        campoCuentaOrigen.clear();
-        campoCuentaDestino.clear();
+        comboCuentaOrigen.setValue(null);
+        comboCuentaDestino.setValue(null);
         campoMonto.clear();
-        campoSucursal.clear();
+        comboSucursal.setValue(null);
     }
 
     public void mostrarMensajeError(String mensaje) {
@@ -166,12 +175,21 @@ public class VistaTransaccion {
         alerta.showAndWait();
     }
 
+    private String valorSeleccionado(ComboBox<String> combo) {
+        String valor = combo.getValue();
+        if (valor == null) {
+            valor = "";
+        }
+        return valor;
+    }
+
     public Scene obtenerEscena()                    { return escena; }
     public Button obtenerBotonEjecutar()            { return botonEjecutar; }
     public Button obtenerBotonLimpiar()             { return botonLimpiar; }
     public ComboBox<String> obtenerComboTipo()      { return comboTipoTransaccion; }
-    public String obtenerCuentaOrigen()             { return campoCuentaOrigen.getText().trim(); }
-    public String obtenerCuentaDestino()            { return campoCuentaDestino.getText().trim(); }
+    public String obtenerTipoSeleccionado()         { return valorSeleccionado(comboTipoTransaccion); }
+    public String obtenerCuentaOrigen()             { return valorSeleccionado(comboCuentaOrigen); }
+    public String obtenerCuentaDestino()            { return valorSeleccionado(comboCuentaDestino); }
     public String obtenerMonto()                    { return campoMonto.getText().trim(); }
-    public String obtenerSucursal()                 { return campoSucursal.getText().trim(); }
+    public String obtenerSucursal()                 { return valorSeleccionado(comboSucursal); }
 }

@@ -1,9 +1,7 @@
 package uv.lis.controlador;
 
-import java.util.ArrayList;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-import uv.lis.modelo.CuentaBancaria;
 import uv.lis.modelo.PermisosEmpleado;
 import uv.lis.modelo.SucursalDAO;
 import uv.lis.modelo.DAO.implementacion.EmpleadoDAO;
@@ -17,29 +15,29 @@ import uv.lis.vista.VistaTransaccion;
 
 public class ControladorMenuPrincipal {
 
-    private static final String TITULO_EMPLEADOS     = "EuroBank - Administracion de Empleados";
-    private static final String TITULO_SUCURSALES    = "EuroBank - Administracion de Sucursales";
-    private static final String TITULO_CLIENTES      = "EuroBank - Clientes";
-    private static final String TITULO_CUENTAS       = "EuroBank - Cuentas Bancarias";
+    private static final String TITULO_EMPLEADOS = "EuroBank - Administracion de Empleados";
+    private static final String TITULO_SUCURSALES = "EuroBank - Administracion de Sucursales";
+    private static final String TITULO_CLIENTES = "EuroBank - Clientes";
+    private static final String TITULO_CUENTAS = "EuroBank - Cuentas Bancarias";
     private static final String TITULO_TRANSACCIONES = "EuroBank - Transacciones";
-    private static final String TITULO_LOGIN         = "EuroBank - Acceso al Sistema";
+    private static final String TITULO_LOGIN = "EuroBank - Acceso al Sistema";
 
     private final VistaMenuPrincipal vistaMenuPrincipal;
-    private final EmpleadoDAO        repositorioEmpleados;
-    private final SucursalDAO        repositorioSucursales;
-    private final Stage              escenarioPrincipal;
-    private final VistaLogin         vistaLogin;
+    private final EmpleadoDAO repositorioEmpleados;
+    private final SucursalDAO repositorioSucursales;
+    private final Stage escenarioPrincipal;
+    private final VistaLogin vistaLogin;
 
     public ControladorMenuPrincipal(VistaMenuPrincipal vistaMenuPrincipal,
                                     EmpleadoDAO repositorioEmpleados,
                                     SucursalDAO repositorioSucursales,
                                     Stage escenarioPrincipal,
                                     VistaLogin vistaLogin) {
-        this.vistaMenuPrincipal    = vistaMenuPrincipal;
-        this.repositorioEmpleados  = repositorioEmpleados;
+        this.vistaMenuPrincipal = vistaMenuPrincipal;
+        this.repositorioEmpleados = repositorioEmpleados;
         this.repositorioSucursales = repositorioSucursales;
-        this.escenarioPrincipal    = escenarioPrincipal;
-        this.vistaLogin            = vistaLogin;
+        this.escenarioPrincipal = escenarioPrincipal;
+        this.vistaLogin = vistaLogin;
     }
 
     public void iniciar(PermisosEmpleado permisos) {
@@ -106,15 +104,8 @@ public class ControladorMenuPrincipal {
 
     private void abrirTransacciones() {
         VistaTransaccion vistaTransaccion = new VistaTransaccion();
-        TransaccionControlador controladorTransaccion =
-            new TransaccionControlador(new ArrayList<CuentaBancaria>());
-        vistaTransaccion.obtenerBotonLimpiar()
-            .setOnAction(evento -> vistaTransaccion.limpiarFormulario());
-        vistaTransaccion.obtenerBotonEjecutar()
-            .setOnAction(evento -> vistaTransaccion.mostrarMensajeInformacion(
-                "Módulo de transacciones abierto. "
-                + "La lógica bancaria queda lista para conectarse con cuentas reales."));
-        controladorTransaccion.obtenerTiposDisponibles();
+        TransaccionControlador controladorTransaccion = new TransaccionControlador();
+        controladorTransaccion.iniciar(vistaTransaccion);
         mostrarVentanaSecundaria(TITULO_TRANSACCIONES, vistaTransaccion.obtenerEscena());
     }
 

@@ -1,7 +1,9 @@
 package uv.lis.controlador;
 
 import uv.lis.modelo.Cliente;
+import uv.lis.modelo.CuentaBancaria;
 import uv.lis.modelo.DAO.implementacion.ClienteDAO;
+import uv.lis.modelo.DAO.implementacion.CuentaDAO;
 import uv.lis.modelo.excepcion.ClienteDuplicadoException;
 import uv.lis.modelo.excepcion.ClienteNoEncontradoException;
 import uv.lis.vista.DialogoCliente;
@@ -13,13 +15,15 @@ import java.util.Optional;
 public class ControladorCliente {
 
     private final ClienteDAO repositorioCliente;
-    private final DialogoCliente     dialogoCliente;
-    private       VistaCliente       vista;
-    private       boolean            propietarioDialogoEstablecido;
+    private final CuentaDAO repositorioCuenta;
+    private final DialogoCliente dialogoCliente;
+    private VistaCliente vista;
+    private boolean propietarioDialogoEstablecido;
 
     public ControladorCliente() {
-        this.repositorioCliente            = new ClienteDAO();
-        this.dialogoCliente                = new DialogoCliente();
+        this.repositorioCliente = new ClienteDAO();
+        this.repositorioCuenta = new CuentaDAO();
+        this.dialogoCliente = new DialogoCliente();
         this.propietarioDialogoEstablecido = false;
     }
 
@@ -57,12 +61,10 @@ public class ControladorCliente {
             throws ClienteNoEncontradoException {
         Optional<Cliente> clienteEncontrado = repositorioCliente.buscarPorRfc(rfcCurp);
         if (!clienteEncontrado.isPresent()) {
-            throw new ClienteNoEncontradoException(
-                "No se encontró ningún cliente con RFC/CURP: " + rfcCurp);
+            throw new ClienteNoEncontradoException("No se encontró ningún cliente con RFC/CURP: " + rfcCurp);
         }
         if (clienteEncontrado.get().tieneCuentasActivas()) {
-            throw new IllegalStateException(
-                "El cliente tiene cuentas activas y no puede ser eliminado.");
+            throw new IllegalStateException("El cliente tiene cuentas activas y no puede ser eliminado.");
         }
         repositorioCliente.eliminar(rfcCurp);
     }
@@ -108,9 +110,27 @@ public class ControladorCliente {
                 seleccionado.getNombreCompleto() + " no tiene cuentas asociadas.");
             return;
         }
-        String resultado = "Cuentas de " + seleccionado.getNombreCompleto()
-            + ": " + String.join(", ", seleccionado.getNumerosCuenta());
+        String resultado = construirResumenSaldos(seleccionado);
         vista.mostrarResultadoSaldo(resultado);
+    }
+
+    private String construirResumenSaldos(Cliente cliente) {
+        StringBuilder resumen = new StringBuilder();
+        resumen.append("Saldos de ").append(cliente.getNombreCompleto()).append(":");
+        double total = 0.0;
+        for (String numeroCuenta : cliente.getNumerosCuenta()) {
+            Optional<CuentaBancaria> cuentaEncontrada = repositorioCuenta.buscarPorNumero(numeroCuenta);
+            if (cuentaEncontrada.isPresent()) {
+                CuentaBancaria cuenta = cuentaEncontrada.get();
+                resumen.append(System.lineSeparator())
+                       .append(cuenta.getNumeroCuenta())
+                       .append(" (").append(cuenta.getTipoCuenta()).append("): $")
+                       .append(String.format("%.2f", cuenta.getSaldo()));
+                total += cuenta.getSaldo();
+            }
+        }
+        resumen.append(System.lineSeparator()).append("Saldo total: $").append(String.format("%.2f", total));
+        return resumen.toString();
     }
 
     private void procesarCaptura(boolean esAlta) {
