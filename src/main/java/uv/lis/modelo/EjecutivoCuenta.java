@@ -65,4 +65,14 @@ public class EjecutivoCuenta extends Empleado {
     public String obtenerRol() {
         return CatalogoRol.EJECUTIVO;
     }
+
+    @Override
+    public PermisosEmpleado obtenerPermisos() {
+        PermisosEmpleado permisos = PermisosEmpleado.constructor()
+                .permitirGestionarCuentas()
+                .permitirRegistrarTransacciones()
+                .permitirGestionarClientes()
+                .construir();
+        return permisos;
+    }
 }

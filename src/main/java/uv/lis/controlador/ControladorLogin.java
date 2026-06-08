@@ -88,7 +88,7 @@ public class ControladorLogin {
                 repositorioSucursales,
                 escenarioPrincipal,
                 vistaLogin);
-        controladorMenuPrincipal.iniciar(empleado.obtenerRol());
+        controladorMenuPrincipal.iniciar(empleado.obtenerPermisos());
         escenarioPrincipal.setTitle(TITULO_VENTANA_MENU);
         escenarioPrincipal.setScene(vistaMenuPrincipal.obtenerEscena());
         escenarioPrincipal.centerOnScreen();

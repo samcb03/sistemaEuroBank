@@ -142,6 +142,8 @@ public abstract class Empleado implements Serializable {
 
     public abstract String obtenerRol();
 
+    public abstract PermisosEmpleado obtenerPermisos();
+
     @Override
     public int hashCode() {
         return Objects.hash(idEmpleado);

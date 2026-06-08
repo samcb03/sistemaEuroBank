@@ -65,4 +65,16 @@ public class Gerente extends Empleado {
     public String obtenerRol() {
         return CatalogoRol.GERENTE;
     }
+
+    @Override
+    public PermisosEmpleado obtenerPermisos() {
+        PermisosEmpleado permisos = PermisosEmpleado.constructor()
+                .permitirAdministrarEmpleados()
+                .permitirGestionarSucursales()
+                .permitirGestionarCuentas()
+                .permitirRegistrarTransacciones()
+                .permitirGestionarClientes()
+                .construir();
+        return permisos;
+    }
 }

@@ -1,9 +1,10 @@
 package uv.lis.controlador;
 
 import java.util.ArrayList;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
-import uv.lis.modelo.CatalogoRol;
 import uv.lis.modelo.CuentaBancaria;
+import uv.lis.modelo.PermisosEmpleado;
 import uv.lis.modelo.SucursalDAO;
 import uv.lis.modelo.DAO.implementacion.EmpleadoDAO;
 import uv.lis.vista.VistaCliente;
@@ -41,16 +42,27 @@ public class ControladorMenuPrincipal {
         this.vistaLogin            = vistaLogin;
     }
 
-    public void iniciar(String rolAutenticado) {
-        configurarPermisos(rolAutenticado);
+    public void iniciar(PermisosEmpleado permisos) {
+        configurarPermisos(permisos);
         registrarManejadores();
     }
 
-    private void configurarPermisos(String rolAutenticado) {
-        boolean puedeAdministrar =
-            CatalogoRol.ADMINISTRADOR.equals(rolAutenticado) ||
-            CatalogoRol.GERENTE.equals(rolAutenticado);
-        vistaMenuPrincipal.obtenerBotonEmpleados().setDisable(!puedeAdministrar);
+    private void configurarPermisos(PermisosEmpleado permisos) {
+        configurarAcceso(vistaMenuPrincipal.obtenerBotonEmpleados(),
+            permisos.puedeAdministrarEmpleados());
+        configurarAcceso(vistaMenuPrincipal.obtenerBotonSucursales(),
+            permisos.puedeGestionarSucursales());
+        configurarAcceso(vistaMenuPrincipal.obtenerBotonCuentas(),
+            permisos.puedeGestionarCuentas());
+        configurarAcceso(vistaMenuPrincipal.obtenerBotonTransacciones(),
+            permisos.puedeRegistrarTransacciones());
+        configurarAcceso(vistaMenuPrincipal.obtenerBotonClientes(),
+            permisos.puedeGestionarClientes());
+    }
+
+    private void configurarAcceso(Button boton, boolean permitido) {
+        boton.setVisible(permitido);
+        boton.setManaged(permitido);
     }
 
     private void registrarManejadores() {

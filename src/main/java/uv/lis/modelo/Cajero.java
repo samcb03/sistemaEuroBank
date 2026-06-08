@@ -76,4 +76,14 @@ public class Cajero extends Empleado {
     public String obtenerRol() {
         return CatalogoRol.CAJERO;
     }
+
+    @Override
+    public PermisosEmpleado obtenerPermisos() {
+        PermisosEmpleado permisos = PermisosEmpleado.constructor()
+                .permitirGestionarCuentas()
+                .permitirRegistrarTransacciones()
+                .permitirGestionarClientes()
+                .construir();
+        return permisos;
+    }
 }
