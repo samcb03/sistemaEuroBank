@@ -52,12 +52,15 @@ public class VistaEmpleados {
     private Scene construirEscena() {
         Label etiquetaTitulo = new Label("Administracion de Empleados");
         etiquetaTitulo.setFont(Font.font("System", FontWeight.BOLD, 18));
+        etiquetaTitulo.setStyle(EstilosVista.TITULO);
+        tablaEmpleados.setStyle(EstilosVista.TABLA);
 
         HBox barraBotones = construirBarraBotones();
         VBox.setVgrow(tablaEmpleados, Priority.ALWAYS);
 
         VBox contenedorPrincipal = new VBox(12);
         contenedorPrincipal.setPadding(new Insets(20));
+        contenedorPrincipal.setStyle(EstilosVista.FONDO_VENTANA);
         contenedorPrincipal.getChildren().addAll(etiquetaTitulo, tablaEmpleados, barraBotones);
 
         Scene escenaConstruida = new Scene(contenedorPrincipal, ANCHO_ESCENA, ALTO_ESCENA);
@@ -65,6 +68,9 @@ public class VistaEmpleados {
     }
 
     private HBox construirBarraBotones() {
+        botonAgregar.setStyle(EstilosVista.BOTON_EXITO);
+        botonEditar.setStyle(EstilosVista.BOTON_PRIMARIO);
+        botonEliminar.setStyle(EstilosVista.BOTON_PELIGRO);
         HBox barraBotones = new HBox(10);
         barraBotones.setAlignment(Pos.CENTER_RIGHT);
         barraBotones.getChildren().addAll(botonAgregar, botonEditar, botonEliminar);

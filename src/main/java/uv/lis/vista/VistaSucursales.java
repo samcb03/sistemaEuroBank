@@ -46,18 +46,24 @@ public class VistaSucursales {
     private Scene construirEscena() {
         Label etiquetaTitulo = new Label("Administracion de Sucursales");
         etiquetaTitulo.setFont(Font.font("System", FontWeight.BOLD, 18));
+        etiquetaTitulo.setStyle(EstilosVista.TITULO);
+        tablaSucursales.setStyle(EstilosVista.TABLA);
 
         HBox barraBotones = construirBarraBotones();
         VBox.setVgrow(tablaSucursales, Priority.ALWAYS);
 
         VBox contenedorPrincipal = new VBox(12);
         contenedorPrincipal.setPadding(new Insets(20));
+        contenedorPrincipal.setStyle(EstilosVista.FONDO_VENTANA);
         contenedorPrincipal.getChildren().addAll(etiquetaTitulo, tablaSucursales, barraBotones);
 
         return new Scene(contenedorPrincipal, ANCHO_ESCENA, ALTO_ESCENA);
     }
 
     private HBox construirBarraBotones() {
+        botonAgregar.setStyle(EstilosVista.BOTON_EXITO);
+        botonEditar.setStyle(EstilosVista.BOTON_PRIMARIO);
+        botonEliminar.setStyle(EstilosVista.BOTON_PELIGRO);
         HBox barraBotones = new HBox(10);
         barraBotones.setAlignment(Pos.CENTER_RIGHT);
         barraBotones.getChildren().addAll(botonAgregar, botonEditar, botonEliminar);

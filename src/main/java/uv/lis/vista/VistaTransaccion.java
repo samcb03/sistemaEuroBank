@@ -68,11 +68,14 @@ public class VistaTransaccion {
     private Scene construirEscena() {
         Label titulo = new Label("Registro de Transacciones");
         titulo.setFont(Font.font("System", FontWeight.BOLD, 18));
+        titulo.setStyle(EstilosVista.TITULO);
+        tablaTransacciones.setStyle(EstilosVista.TABLA);
 
         VBox.setVgrow(tablaTransacciones, Priority.ALWAYS);
 
         VBox contenedor = new VBox(12);
         contenedor.setPadding(new Insets(20));
+        contenedor.setStyle(EstilosVista.FONDO_VENTANA);
         contenedor.getChildren().addAll(
             titulo,
             construirFormulario(),
@@ -89,6 +92,11 @@ public class VistaTransaccion {
         comboCuentaDestino.setPromptText("Cuenta destino");
         campoMonto.setPromptText("Monto");
         comboSucursal.setPromptText("Sucursal");
+        comboTipoTransaccion.setStyle(EstilosVista.CAMPO);
+        comboCuentaOrigen.setStyle(EstilosVista.CAMPO);
+        comboCuentaDestino.setStyle(EstilosVista.CAMPO);
+        campoMonto.setStyle(EstilosVista.CAMPO);
+        comboSucursal.setStyle(EstilosVista.CAMPO);
 
         GridPane grid = new GridPane();
         grid.setHgap(10);
@@ -111,6 +119,8 @@ public class VistaTransaccion {
     private HBox construirBarraBotones() {
         HBox barra = new HBox(10);
         barra.setAlignment(Pos.CENTER_RIGHT);
+        botonEjecutar.setStyle(EstilosVista.BOTON_EXITO);
+        botonLimpiar.setStyle(EstilosVista.BOTON_SECUNDARIO);
         barra.getChildren().addAll(botonLimpiar, botonEjecutar);
         return barra;
     }

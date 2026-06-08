@@ -36,14 +36,20 @@ public class VistaLogin {
     private Scene construirEscena() {
         Label etiquetaTitulo = new Label("Sistema EuroBank");
         etiquetaTitulo.setFont(Font.font("System", FontWeight.BOLD, 18));
+        etiquetaTitulo.setStyle(EstilosVista.TITULO);
+
+        Label etiquetaSubtitulo = new Label("Acceso al sistema");
+        etiquetaSubtitulo.setStyle(EstilosVista.SUBTITULO);
 
         GridPane panelCampos = construirPanelCampos();
         botonAcceder.setMaxWidth(Double.MAX_VALUE);
+        botonAcceder.setStyle(EstilosVista.BOTON_PRIMARIO);
 
         VBox contenedorPrincipal = new VBox(15);
         contenedorPrincipal.setAlignment(Pos.CENTER);
         contenedorPrincipal.setPadding(new Insets(25));
-        contenedorPrincipal.getChildren().addAll(etiquetaTitulo, panelCampos, botonAcceder, etiquetaMensaje);
+        contenedorPrincipal.setStyle(EstilosVista.FONDO_VENTANA);
+        contenedorPrincipal.getChildren().addAll(etiquetaTitulo, etiquetaSubtitulo, panelCampos, botonAcceder, etiquetaMensaje);
 
         Scene escenaConstruida = new Scene(contenedorPrincipal, ANCHO_ESCENA, ALTO_ESCENA);
         return escenaConstruida;
@@ -55,6 +61,8 @@ public class VistaLogin {
 
         campoNombreUsuario.setPromptText("Ingrese su usuario");
         campoContrasenia.setPromptText("Ingrese su contrasena");
+        campoNombreUsuario.setStyle(EstilosVista.CAMPO);
+        campoContrasenia.setStyle(EstilosVista.CAMPO);
 
         GridPane panelCampos = new GridPane();
         panelCampos.setAlignment(Pos.CENTER);

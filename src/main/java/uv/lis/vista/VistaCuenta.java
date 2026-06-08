@@ -54,11 +54,14 @@ public class VistaCuenta {
     private Scene construirEscena() {
         Label titulo = new Label("Administración de Cuentas Bancarias");
         titulo.setFont(Font.font("System", FontWeight.BOLD, 18));
+        titulo.setStyle(EstilosVista.TITULO);
+        tablaCuentas.setStyle(EstilosVista.TABLA);
 
         VBox.setVgrow(tablaCuentas, Priority.ALWAYS);
 
         VBox contenedor = new VBox(12);
         contenedor.setPadding(new Insets(20));
+        contenedor.setStyle(EstilosVista.FONDO_VENTANA);
         contenedor.getChildren().addAll(
             titulo,
             tablaCuentas,
@@ -68,6 +71,10 @@ public class VistaCuenta {
     }
 
     private HBox construirBarraBotones() {
+        botonAgregar.setStyle(EstilosVista.BOTON_EXITO);
+        botonCerrar.setStyle(EstilosVista.BOTON_PELIGRO);
+        botonExportarCSV.setStyle(EstilosVista.BOTON_SECUNDARIO);
+        botonExportarPDF.setStyle(EstilosVista.BOTON_SECUNDARIO);
         HBox barraExportar = new HBox(10, botonExportarCSV, botonExportarPDF);
         barraExportar.setAlignment(Pos.CENTER_LEFT);
 
