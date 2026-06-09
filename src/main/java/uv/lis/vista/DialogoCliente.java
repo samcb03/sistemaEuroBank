@@ -17,31 +17,31 @@ import uv.lis.modelo.ValidadorCampos;
 public class DialogoCliente {
 
     private static final String TITULO_AGREGAR = "Agregar cliente";
-    private static final String TITULO_EDITAR  = "Editar cliente";
+    private static final String TITULO_EDITAR = "Editar cliente";
 
-    private final TextField  campoRfcCurp;
-    private final TextField  campoNombre;
-    private final TextField  campoApellidos;
-    private final TextField  campoNacionalidad;
+    private final TextField campoRfcCurp;
+    private final TextField campoNombre;
+    private final TextField campoApellidos;
+    private final TextField campoNacionalidad;
     private final DatePicker selectorFechaNacimiento;
-    private final TextField  campoDireccion;
-    private final TextField  campoTelefono;
-    private final TextField  campoCorreo;
+    private final TextField campoDireccion;
+    private final TextField campoTelefono;
+    private final TextField campoCorreo;
 
     private final ButtonType tipoBotonGuardar;
     private final Dialog<ButtonType> dialogo;
 
     public DialogoCliente() {
-        this.campoRfcCurp            = new TextField();
-        this.campoNombre             = new TextField();
-        this.campoApellidos          = new TextField();
-        this.campoNacionalidad       = new TextField();
+        this.campoRfcCurp = new TextField();
+        this.campoNombre = new TextField();
+        this.campoApellidos = new TextField();
+        this.campoNacionalidad = new TextField();
         this.selectorFechaNacimiento = new DatePicker();
-        this.campoDireccion          = new TextField();
-        this.campoTelefono           = new TextField();
-        this.campoCorreo             = new TextField();
-        this.tipoBotonGuardar        = new ButtonType("Guardar", ButtonData.OK_DONE);
-        this.dialogo                 = construirDialogo();
+        this.campoDireccion = new TextField();
+        this.campoTelefono = new TextField();
+        this.campoCorreo = new TextField();
+        this.tipoBotonGuardar = new ButtonType("Guardar", ButtonData.OK_DONE);
+        this.dialogo = construirDialogo();
     }
 
     public void establecerVentanaPropietaria(Window ventanaPropietaria) {
@@ -66,13 +66,13 @@ public class DialogoCliente {
     }
 
     public Cliente obtenerCliente() {
-        String rfcCurp      = campoRfcCurp.getText().trim();
-        String nombre       = campoNombre.getText().trim();
-        String apellidos    = campoApellidos.getText().trim();
+        String rfcCurp = campoRfcCurp.getText().trim().toUpperCase();
+        String nombre = campoNombre.getText().trim();
+        String apellidos = campoApellidos.getText().trim();
         String nacionalidad = campoNacionalidad.getText().trim();
-        String direccion    = campoDireccion.getText().trim();
-        String telefono     = campoTelefono.getText().trim();
-        String correo       = campoCorreo.getText().trim();
+        String direccion = campoDireccion.getText().trim();
+        String telefono = campoTelefono.getText().trim();
+        String correo = campoCorreo.getText().trim();
         LocalDate fechaNacimiento = selectorFechaNacimiento.getValue();
 
         ValidadorCampos.validarRfcCurp(rfcCurp);
@@ -105,28 +105,36 @@ public class DialogoCliente {
         grid.setVgap(8);
         grid.setPadding(new Insets(20));
 
-        grid.add(new Label("RFC/CURP:"), 0, 0); grid.add(campoRfcCurp,            
-            1, 0);
-        grid.add(new Label("Nombre:"), 0, 1); grid.add(campoNombre,            
-             1, 1);
-        grid.add(new Label("Apellidos:"), 0, 2); grid.add(campoApellidos,          
-            1, 2);
-        grid.add(new Label("Nacionalidad:"),0, 3); grid.add(campoNacionalidad,       
-            1, 3);
-        grid.add(new Label("Fecha nacimiento:"), 0, 4); grid.add(selectorFechaNacimiento, 
-            1, 4);
-        grid.add(new Label("Dirección:"), 0, 5); grid.add(campoDireccion,          
-            1, 5);
-        grid.add(new Label("Teléfono:"), 0, 6); grid.add(campoTelefono,           
-            1, 6);
-        grid.add(new Label("Correo:"), 0, 7); grid.add(campoCorreo,             
-            1, 7);
+        grid.add(new Label("RFC/CURP:"), 0, 0);
+        grid.add(campoRfcCurp,
+                1, 0);
+        grid.add(new Label("Nombre:"), 0, 1);
+        grid.add(campoNombre,
+                1, 1);
+        grid.add(new Label("Apellidos:"), 0, 2);
+        grid.add(campoApellidos,
+                1, 2);
+        grid.add(new Label("Nacionalidad:"), 0, 3);
+        grid.add(campoNacionalidad,
+                1, 3);
+        grid.add(new Label("Fecha nacimiento:"), 0, 4);
+        grid.add(selectorFechaNacimiento,
+                1, 4);
+        grid.add(new Label("Dirección:"), 0, 5);
+        grid.add(campoDireccion,
+                1, 5);
+        grid.add(new Label("Teléfono:"), 0, 6);
+        grid.add(campoTelefono,
+                1, 6);
+        grid.add(new Label("Correo:"), 0, 7);
+        grid.add(campoCorreo,
+                1, 7);
 
         return grid;
     }
 
     private void configurarPrompts() {
-        campoRfcCurp.setPromptText("Ej. GOMJ900512AB1");
+        campoRfcCurp.setPromptText("RFC O CURP");
         campoNombre.setPromptText("Nombre(s)");
         campoApellidos.setPromptText("Apellido paterno y materno");
         campoNacionalidad.setPromptText("Ej. Mexicana");
