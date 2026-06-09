@@ -1,5 +1,6 @@
 package uv.lis.vista;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import javafx.geometry.Insets;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -11,6 +12,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Window;
 import uv.lis.modelo.Cliente;
+import uv.lis.modelo.ValidadorCampos;
 
 public class DialogoCliente {
 
@@ -64,18 +66,28 @@ public class DialogoCliente {
     }
 
     public Cliente obtenerCliente() {
-        String fechaTexto = selectorFechaNacimiento.getValue() != null
-                ? selectorFechaNacimiento.getValue().toString()
-                : "";
-        return new Cliente(
-                campoRfcCurp.getText().trim(),
-                campoNombre.getText().trim(),
-                campoApellidos.getText().trim(),
-                campoNacionalidad.getText().trim(),
-                fechaTexto,
-                campoDireccion.getText().trim(),
-                campoTelefono.getText().trim(),
-                campoCorreo.getText().trim());
+        String rfcCurp      = campoRfcCurp.getText().trim();
+        String nombre       = campoNombre.getText().trim();
+        String apellidos    = campoApellidos.getText().trim();
+        String nacionalidad = campoNacionalidad.getText().trim();
+        String direccion    = campoDireccion.getText().trim();
+        String telefono     = campoTelefono.getText().trim();
+        String correo       = campoCorreo.getText().trim();
+        LocalDate fechaNacimiento = selectorFechaNacimiento.getValue();
+
+        ValidadorCampos.validarRfcCurp(rfcCurp);
+        ValidadorCampos.validarSoloLetras(nombre, "Nombre");
+        ValidadorCampos.validarSoloLetras(apellidos, "Apellidos");
+        ValidadorCampos.validarSoloLetras(nacionalidad, "Nacionalidad");
+        ValidadorCampos.validarFechaNacimiento(fechaNacimiento);
+        ValidadorCampos.validarObligatorio(direccion, "Dirección");
+        ValidadorCampos.validarTelefono(telefono);
+        ValidadorCampos.validarCorreo(correo);
+
+        Cliente cliente = new Cliente(
+                rfcCurp, nombre, apellidos, nacionalidad,
+                fechaNacimiento.toString(), direccion, telefono, correo);
+        return cliente;
     }
 
     private Dialog<ButtonType> construirDialogo() {
@@ -93,14 +105,22 @@ public class DialogoCliente {
         grid.setVgap(8);
         grid.setPadding(new Insets(20));
 
-        grid.add(new Label("RFC/CURP:"),         0, 0);  grid.add(campoRfcCurp,            1, 0);
-        grid.add(new Label("Nombre:"),           0, 1);  grid.add(campoNombre,             1, 1);
-        grid.add(new Label("Apellidos:"),        0, 2);  grid.add(campoApellidos,          1, 2);
-        grid.add(new Label("Nacionalidad:"),     0, 3);  grid.add(campoNacionalidad,       1, 3);
-        grid.add(new Label("Fecha nacimiento:"), 0, 4);  grid.add(selectorFechaNacimiento, 1, 4);
-        grid.add(new Label("Dirección:"),        0, 5);  grid.add(campoDireccion,          1, 5);
-        grid.add(new Label("Teléfono:"),         0, 6);  grid.add(campoTelefono,           1, 6);
-        grid.add(new Label("Correo:"),           0, 7);  grid.add(campoCorreo,             1, 7);
+        grid.add(new Label("RFC/CURP:"), 0, 0); grid.add(campoRfcCurp,            
+            1, 0);
+        grid.add(new Label("Nombre:"), 0, 1); grid.add(campoNombre,            
+             1, 1);
+        grid.add(new Label("Apellidos:"), 0, 2); grid.add(campoApellidos,          
+            1, 2);
+        grid.add(new Label("Nacionalidad:"),0, 3); grid.add(campoNacionalidad,       
+            1, 3);
+        grid.add(new Label("Fecha nacimiento:"), 0, 4); grid.add(selectorFechaNacimiento, 
+            1, 4);
+        grid.add(new Label("Dirección:"), 0, 5); grid.add(campoDireccion,          
+            1, 5);
+        grid.add(new Label("Teléfono:"), 0, 6); grid.add(campoTelefono,           
+            1, 6);
+        grid.add(new Label("Correo:"), 0, 7); grid.add(campoCorreo,             
+            1, 7);
 
         return grid;
     }

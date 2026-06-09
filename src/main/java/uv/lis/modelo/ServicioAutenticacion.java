@@ -23,9 +23,7 @@ public class ServicioAutenticacion {
         return resultado;
     }
 
-    private ResultadoAutenticacion verificarCredenciales(Empleado empleado,
-                                                         String nombreUsuario,
-                                                         String contrasenia) {
+    private ResultadoAutenticacion verificarCredenciales(Empleado empleado, String nombreUsuario, String contrasenia) {
         ResultadoAutenticacion resultado;
         if (empleado.coincideCredenciales(nombreUsuario, contrasenia)) {
             resultado = ResultadoAutenticacion.crearExito(empleado);
