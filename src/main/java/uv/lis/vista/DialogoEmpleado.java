@@ -116,8 +116,7 @@ public class DialogoEmpleado {
     private VBox construirContenido() {
         VBox contenido = new VBox(10);
         contenido.setPadding(new Insets(15));
-        contenido.getChildren().addAll(
-                construirSeccionComun(), seccionCajero, seccionEjecutivo, seccionGerente);
+        contenido.getChildren().addAll(construirSeccionComun(), seccionCajero, seccionEjecutivo, seccionGerente);
         return contenido;
     }
 

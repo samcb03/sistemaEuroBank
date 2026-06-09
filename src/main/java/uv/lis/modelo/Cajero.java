@@ -82,7 +82,6 @@ public class Cajero extends Empleado {
         PermisosEmpleado permisos = PermisosEmpleado.constructor()
                 .permitirGestionarCuentas()
                 .permitirRegistrarTransacciones()
-                .permitirGestionarClientes()
                 .construir();
         return permisos;
     }

@@ -13,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Window;
 import uv.lis.modelo.Sucursal;
+import uv.lis.modelo.ValidadorCampos;
 
 public class DialogoSucursal {
 
@@ -101,14 +102,26 @@ public class DialogoSucursal {
     }
 
     public Sucursal construirSucursalDesdeFormulario() {
-        return new Sucursal(
-                campoNumeroIdentificacion.getText().trim(),
-                campoNombre.getText().trim(),
-                campoDireccion.getText().trim(),
-                campoTelefono.getText().trim(),
-                campoCorreo.getText().trim(),
-                gerenteSeleccionado(),
-                campoPersonaContacto.getText().trim());
+        String numeroIdentificacion = campoNumeroIdentificacion.getText().trim();
+        String nombre = campoNombre.getText().trim();
+        String direccion = campoDireccion.getText().trim();
+        String telefono = campoTelefono.getText().trim();
+        String correo = campoCorreo.getText().trim();
+        String gerente = gerenteSeleccionado();
+        String personaContacto = campoPersonaContacto.getText().trim();
+
+        ValidadorCampos.validarObligatorio(numeroIdentificacion, "Número de identificación");
+        ValidadorCampos.validarObligatorio(nombre, "Nombre");
+        ValidadorCampos.validarObligatorio(direccion, "Dirección");
+        ValidadorCampos.validarTelefono(telefono);
+        ValidadorCampos.validarCorreo(correo);
+        ValidadorCampos.validarObligatorio(gerente, "Gerente");
+        ValidadorCampos.validarObligatorio(personaContacto, "Persona de contacto");
+
+        Sucursal sucursal = new Sucursal(
+                numeroIdentificacion, nombre, direccion,
+                telefono, correo, gerente, personaContacto);
+        return sucursal;
     }
 
     public void cargarGerentes(List<String> nombresGerentes) {
